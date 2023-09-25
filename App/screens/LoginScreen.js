@@ -5,14 +5,71 @@ import {
   Image,
   TextInput,
   StyleSheet,
+  Alert,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
+import { Dropdown } from "react-native-element-dropdown";
+import AntDesign from "@expo/vector-icons/AntDesign";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowLeftIcon } from "react-native-heroicons/solid";
 import { themeColors } from "../theme";
 import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+
+const data = [
+  {
+    label: "Donor",
+    value: "1",
+  },
+  {
+    label: "NGO",
+    value: "2",
+  },
+  {
+    label: "Delivery Person",
+    value: "3",
+  },
+];
 
 export default function LoginScreen() {
+  const [value, setValue] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [userTypeError, setUserTypeError] = useState("");
+
+  const validateEmail = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setEmailError("Invalid email address");
+      return false;
+    }
+    return true;
+  };
+
+  const validatePassword = () => {
+    if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters");
+      return false;
+    }
+    return true;
+  };
+
+
+
+  const renderLabel = () => {
+    if (value || isFocus) {
+      return (
+        <Text style={[styles.label, isFocus && { color: "orange" }]}>
+          User Type:
+        </Text>
+      );
+    }
+    return null;
+  };
+
   const navigation = useNavigation();
   return (
     <View style={styles.outermostCont}>
@@ -35,17 +92,86 @@ export default function LoginScreen() {
       <View style={styles.innerCont}>
         <View className="form space-y-2">
           <Text style={styles.attributeName}>Email Address</Text>
-          <TextInput style={styles.inputBox} placeholder="Enter Email" />
+          <TextInput
+            style={styles.inputBox}
+            placeholder="Enter Email"
+            onChangeText={(text) => {
+              setEmail(text);
+              setEmailError("");
+            }}
+          />
+          <Text style={styles.errorText}>{emailError}</Text>
+
           <Text style={styles.attributeName}>Password</Text>
           <TextInput
             style={styles.inputBox}
             secureTextEntry
             placeholder="Enter Password"
+            onChangeText={(text) => {
+              setPassword(text);
+              setPasswordError("");
+            }}
           />
+          <Text style={styles.errorText}>{passwordError}</Text>
           <TouchableOpacity style={styles.forgotCont}>
             <Text style={styles.forgotText}>Forgot Password?</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.loginButton}>
+
+          <TouchableOpacity>
+            <View style={styles.container}>
+              {renderLabel()}
+              <Dropdown
+                style={[styles.dropdown, isFocus && { borderColor: "orange" }]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={data}
+                search
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder={!isFocus ? "    Select login type" : "..."}
+                searchPlaceholder="Search..."
+                value={value}
+                onFocus={() => setIsFocus(true)}
+                onBlur={() => setIsFocus(false)}
+                onChange={(item) => {
+                  setValue(item.value);
+                  setIsFocus(false);
+                }}
+                renderLeftIcon={() => (
+                  <Ionicons name="person" size={20} color="black" />
+                )}
+              />
+            </View>
+            <Text style={styles.errorText}>{userTypeError}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={() => {
+              let isValid = true;
+              if (!validateEmail() || !validatePassword()) {
+                isValid = false;
+              }
+              if (value == null) {
+                setUserTypeError("Please select a user type");
+                isValid = false;
+              } else {
+                setUserTypeError("");
+              }
+
+              if (isValid) {
+                // Proceed with sign-up logic
+              } else {
+                Alert.alert(
+                  "Error",
+                  "Please fill in all the fields correctly."
+                );
+              }
+            }}
+          >
             <Text style={styles.login}>Login</Text>
           </TouchableOpacity>
         </View>
@@ -179,5 +305,9 @@ const styles = StyleSheet.create({
   signup: {
     fontWeight: "600",
     color: "orange",
+  },
+  errorText: {
+    color: "red",
+    marginLeft: 15,
   },
 });

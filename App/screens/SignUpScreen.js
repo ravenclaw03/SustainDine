@@ -5,14 +5,89 @@ import {
   Image,
   TextInput,
   StyleSheet,
+  Alert,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
+import { Dropdown } from "react-native-element-dropdown";
 import { themeColors } from "../theme";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowLeftIcon } from "react-native-heroicons/solid";
 import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+
+const data = [
+  {
+    label: "Donor",
+    value: "1",
+  },
+  {
+    label: "NGO",
+    value: "2",
+  },
+  {
+    label: "Delivery Person",
+    value: "3",
+  },
+];
 
 export default function SignUpScreen() {
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [mobileno, setmobileno] = useState("");
+  const [value, setValue] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
+  const [fullNameError, setFullNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [MobileNoError, setMobileNoError] = useState("");
+  const [userTypeError, setUserTypeError] = useState("");
+
+  const validateFullName = () => {
+    if (fullName.trim() === "") {
+      setFullNameError("Full Name is required");
+      return false;
+    }
+    return true;
+  };
+
+  const validateEmail = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setEmailError("Invalid Email Address");
+      return false;
+    }
+    return true;
+  };
+
+  const validatePassword = () => {
+    if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters");
+      return false;
+    }
+    return true;
+  };
+
+  const validateMobileNo = () => {
+    if (mobileno.length != 10) {
+      setMobileNoError("Mobile No. must be 10 digits");
+      return false;
+    }
+    return true;
+  };
+
+
+  const renderLabel = () => {
+    if (value || isFocus) {
+      return (
+        <Text style={[styles.label, isFocus && { color: "orange" }]}>
+          User Type:
+        </Text>
+      );
+    }
+    return null;
+  };
+
   const navigation = useNavigation();
   return (
     <View style={styles.outermostCont}>
@@ -35,16 +110,112 @@ export default function SignUpScreen() {
       <View style={styles.inputCont}>
         <View className="form space-y-2">
           <Text style={styles.attributeName}>Full Name</Text>
-          <TextInput style={styles.inputBox} placeholder="Enter Name" />
+
+          <TextInput
+            style={styles.inputBox}
+            placeholder="Enter Name"
+            onChangeText={(text) => {
+              setFullName(text);
+              setFullNameError("");
+            }}
+          />
+          <Text style={styles.errorText}>{fullNameError}</Text>
+
           <Text style={styles.attributeName}>Email Address</Text>
-          <TextInput style={styles.inputBox} placeholder="Enter Email" />
+          <TextInput
+            style={styles.inputBox}
+            placeholder="Enter Email"
+            onChangeText={(text) => {
+              setEmail(text);
+              setEmailError("");
+            }}
+          />
+          <Text style={styles.errorText}>{emailError}</Text>
+
           <Text style={styles.attributeName}>Password</Text>
           <TextInput
             style={styles.inputBox}
             secureTextEntry
             placeholder="Enter Password"
+            onChangeText={(text) => {
+              setPassword(text);
+              setPasswordError("");
+            }}
           />
-          <TouchableOpacity style={styles.signupButton}>
+          <Text style={styles.errorText}>{passwordError}</Text>
+
+          <Text style={styles.attributeName}>Mobile No.</Text>
+
+          <TextInput
+            style={styles.inputBox}
+            placeholder="Enter Mobile No."
+            onChangeText={(text) => {
+              setmobileno(text);
+              setMobileNoError("");
+            }}
+          />
+          <Text style={styles.errorText}>{MobileNoError}</Text>
+
+          <TouchableOpacity>
+            <View style={styles.container}>
+              {renderLabel()}
+              <Dropdown
+                style={[styles.dropdown, isFocus && { borderColor: "orange" }]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={data}
+                search
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder={!isFocus ? "    Select login type" : "..."}
+                searchPlaceholder="Search..."
+                value={value}
+                onFocus={() => setIsFocus(true)}
+                onBlur={() => setIsFocus(false)}
+                onChange={(item) => {
+                  setValue(item.value);
+                  setIsFocus(false);
+                }}
+                renderLeftIcon={() => (
+                  <Ionicons name="person" size={20} color="black" />
+                )}
+              />
+            </View>
+            <Text style={styles.errorText}>{userTypeError}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.signupButton}
+            onPress={() => {
+              let isValid = true;
+              if (
+                !validateFullName() ||
+                !validateEmail() ||
+                !validatePassword() ||
+                !validateMobileNo()
+              ) {
+                isValid = false;
+              }
+              if (value === null) {
+                setUserTypeError("Please select a user type.");
+                isValid = false;
+              } else {
+                setUserTypeError("");
+              }
+
+              if (isValid) {
+                // Proceed with sign-up logic
+              } else {
+                Alert.alert(
+                  "Error",
+                  "Please fill in all the fields correctly."
+                );
+              }
+            }}
+          >
             <Text style={styles.signup}>Sign Up</Text>
           </TouchableOpacity>
         </View>
@@ -111,11 +282,11 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 50,
   },
   inputBox: {
-    padding: 16,
+    padding: 12,
     backgroundColor: "#F3F4F6",
     color: "#4A5568",
     borderRadius: 16,
-    marginBottom: 16,
+    marginBottom: 8,
   },
   attributeName: {
     color: "black",
@@ -170,5 +341,9 @@ const styles = StyleSheet.create({
   login: {
     fontWeight: "600",
     color: "orange",
+  },
+  errorText: {
+    color: "red",
+    marginLeft: 15,
   },
 });

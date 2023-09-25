@@ -60,8 +60,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   gifHolder: {
-    width: 450,
-    height: 350,
+    width: 600,
+    height: 400,
     borderRadius: 20,
     padding: 20,
     marginBottom: 10,
