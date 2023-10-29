@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AvailableScreenDP from "./AvailableScreenDP";
@@ -7,9 +7,11 @@ import IconButton from "../../UI/IconButton";
 import { Ionicons } from "@expo/vector-icons";
 import AccountScreenDP from "./AccountScreenDP";
 
+
 const Tab = createBottomTabNavigator();
 
 export default function MainScreenDP() {
+
   return (
     <Tab.Navigator
       screenOptions={{

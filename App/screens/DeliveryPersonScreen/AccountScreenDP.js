@@ -19,7 +19,7 @@ export default function AccountScreenDP() {
         </View>
       </View>
       <View style={styles.iconContainer}>
-        <TouchableOpacity style={styles.iconButton}>
+        <TouchableOpacity style={styles.iconButton} >
           <AntDesign name="edit" size={24} color="#333" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.iconButton}>
