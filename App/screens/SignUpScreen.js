@@ -14,6 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowLeftIcon } from "react-native-heroicons/solid";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const data = [
   {
@@ -255,7 +256,7 @@ const styles = StyleSheet.create({
   outermostCont: {
     flex: 1,
     backgroundColor: themeColors.bg,
-    marginTop: 10,
+    marginTop: hp('1%'),
   },
   backArrowView: {
     flexDirection: "row",
@@ -267,72 +268,71 @@ const styles = StyleSheet.create({
   },
   backbutton: {
     backgroundColor: "orange",
-    padding: 8,
-    borderTopRightRadius: 10,
-    borderBottomLeftRadius: 10,
-    marginLeft: 25,
+    padding: wp('2%'), 
+    borderTopRightRadius: wp('2.5%'), 
+    borderBottomLeftRadius: wp('2.5%'), 
+    marginLeft: wp('6%'),
   },
   inputCont: {
     flex: 1,
     backgroundColor: "white",
-    paddingLeft: 32,
-    paddingRight: 32,
-    paddingTop: 32,
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
+    paddingLeft: wp('8%'),
+    paddingRight: wp('8%'),
+    paddingTop: hp('4%'),
+    borderTopLeftRadius: wp('12%'),
+    borderTopRightRadius: wp('12%'),
   },
   inputBox: {
-    padding: 12,
+    padding: wp('3%'),
     backgroundColor: "#F3F4F6",
     color: "#4A5568",
-    borderRadius: 16,
-    marginBottom: 8,
+    borderRadius: wp('4%'),
   },
   attributeName: {
     color: "black",
     fontWeight: "400",
-    marginLeft: 15,
+    marginLeft:wp('4%'),
   },
   signupButton: {
-    paddingTop: 12,
-    paddingBottom: 12,
+    paddingTop: hp('1.5%'), 
+    paddingBottom: hp('1.5%'), 
     backgroundColor: "orange",
-    borderRadius: 12,
+    borderRadius: wp('3%'),
   },
   signup: {
-    fontSize: 16,
+    fontSize: wp('3.5%'),
     fontWeight: "bold",
     textAlign: "center",
     color: "black",
   },
   or: {
-    fontSize: 20,
+    fontSize: wp('4%'), 
     color: "#4a5568",
     fontWeight: "bold",
     textAlign: "center",
-    paddingTop: 16,
-    paddingBottom: 16,
+    paddingTop: hp('1%'), 
+    paddingBottom: hp('1%'),
   },
   bottomCont: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
-    gap: 50,
+    gap: wp('10%'),
   },
   bottomInnerCont: {
-    padding: 10,
+    padding: wp('2%'),
     backgroundColor: "#F3F4F6",
-    borderRadius: 16,
+    borderRadius: wp('3%'),
   },
   img: {
-    width: 40,
-    height: 40,
+    width: wp('8%'),
+    height: wp('8%'),
   },
   lastCont: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 24,
+    marginTop: hp('2%'),
   },
   textBlock: {
     color: "#718096",
@@ -344,6 +344,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "red",
-    marginLeft: 15,
+    marginLeft: wp('3%'),
   },
 });

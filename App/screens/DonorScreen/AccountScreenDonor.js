@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons"; 
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 export default function AccountScreenDonor() {
   return (
@@ -33,48 +34,48 @@ export default function AccountScreenDonor() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center", 
-    justifyContent: "center",
-    backgroundColor: "#F5F5F5", 
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F5F5F5',
   },
   header: {
-    position: "absolute",
-    top: 20,
-    left: 20,
+    position: 'absolute',
+    top: hp('2%'),
+    left: wp('2%'),
   },
   greeting: {
-    fontSize: 30,
-    fontWeight: "bold",
-    color: "#333",
+    fontSize: hp('3%'),
+    fontWeight: 'bold',
+    color: '#333',
   },
   profileContainer: {
-    flexDirection: "column",
-    alignItems: "center",
-    marginBottom: 50,
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginBottom: hp('10%'),
   },
   profileInfo: {
-    marginLeft: 10,
-    flexDirection: "row",
+    marginLeft: wp('2%'),
+    flexDirection: 'row',
   },
   label: {
-    fontSize: 25,
-    color: "#666",
-    marginBottom: 5,
+    fontSize: hp('3%'),
+    color: '#666',
+    marginBottom: hp('1%'),
   },
   value: {
-    fontSize: 25,
-    fontWeight: "bold",
-    color: "#333", 
-    marginBottom: 15,
-    marginLeft: 20,
+    fontSize: hp('3%'),
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: hp('2%'),
+    marginLeft: wp('4%'),
   },
   iconContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   iconButton: {
-    backgroundColor: "#FFA500",
-    padding: 10,
-    borderRadius: 20,
-    marginHorizontal: 10,
+    backgroundColor: '#FFA500',
+    padding: hp('1.5%'),
+    borderRadius: wp('10%'),
+    marginHorizontal: wp('2%'),
   },
 });

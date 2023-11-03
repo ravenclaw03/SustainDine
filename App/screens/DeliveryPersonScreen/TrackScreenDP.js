@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Text, StyleSheet, View } from "react-native";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 export default function TrackScreenDP() {
   const [acceptedOrder, setAcceptedOrder] = useState(null);
@@ -51,39 +52,39 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   cont: {
-    height: 50,
-    width: 300,
-    marginTop: 300,
-    borderRadius: 20,
+    height: hp('6.25%'), 
+    width: wp('80%'),
+    marginTop: hp('37.5%'), 
+    borderRadius: wp('5%'),
     alignContent: "center",
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#0096FF",
   },
   text: {
-    marginLeft: 65,
-    fontSize: 18,
+    marginLeft: wp('16.25%'), 
+    fontSize: wp('4.5%'), 
   },
   cardContainer: {
-    width: 300,
+    width: wp('80%'), 
     backgroundColor: "#e3e3e3",
-    padding: 20,
-    borderRadius: 10,
-    marginTop: 100,
+    padding: wp('5%'), 
+    borderRadius: wp('2.5%'), 
+    marginTop: hp('12.5%'), 
   },
   cardTitle: {
-    fontSize: 20,
+    fontSize: wp('4.5%'), 
     fontWeight: "bold",
-    marginBottom: 15,
+    marginBottom: hp('3.75%'), 
   },
   cardItem: {
-    marginBottom: 10,
+    marginBottom: hp('1.5%'),
   },
   cardLabel: {
-    fontSize: 16,
+    fontSize: wp('3.5%'),
     fontWeight: "bold",
   },
   cardValue: {
-    fontSize: 16,
+    fontSize: wp('4%'),
   },
 });

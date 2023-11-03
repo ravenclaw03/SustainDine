@@ -3,6 +3,7 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { themeColors } from "../theme";
 import { useNavigation } from "@react-navigation/native";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 function WelcomeScreen() {
   const navigation = useNavigation();
@@ -45,42 +46,42 @@ const styles = StyleSheet.create({
   cont: {
     flex: 1,
     justifyContent: "center",
-    marginBottom: 80,
+    marginBottom: hp('5%'),
   },
   sustaindineText: {
     color: "black",
     fontWeight: "bold",
-    fontSize: 40,
+    fontSize: wp('8%'),
     textAlign: "center",
-    padding: 20,
-    marginBottom: 50,
+    padding: wp('5%'),
+    marginBottom: hp('5%'),
   },
   imgCont: {
     flexDirection: "row",
     justifyContent: "center",
   },
   gifHolder: {
-    width: 600,
-    height: 400,
-    borderRadius: 20,
-    padding: 20,
-    marginBottom: 10,
+    width: wp('100%'), 
+    height: hp('40%'), 
+    borderRadius: wp('5%'), 
+    padding: wp('5%'),
+    marginBottom: hp('2%'),
   },
   signupCont: {
-    marginTop: 50,
-    marginBottom: 50,
+    marginTop: hp('8%'),
+    marginBottom: hp('8%'),
     alignContent: "space-around",
   },
   sigupButton: {
-    paddingTop: 12,
-    paddingBottom: 12,
+    paddingTop: hp('1.5%'), 
+    paddingBottom: hp('1.5%'), 
     backgroundColor: "orange",
-    marginLeft: 60,
-    marginRight: 60,
-    borderRadius: 15,
+    marginLeft: wp('15%'), 
+    marginRight: wp('15%'), 
+    borderRadius: wp('4%'),
   },
   signupText: {
-    fontSize: 20,
+    fontSize: wp('4%'),
     fontWeight: "700",
     textAlign: "center",
     color: "black",
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
   bottomCont: {
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 10,
+    marginTop: hp('2%'),
   },
   text1: {
     color: "black",

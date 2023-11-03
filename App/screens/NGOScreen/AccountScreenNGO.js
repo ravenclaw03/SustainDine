@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons"; 
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 export default function AccountScreenNGO() {
   return (
@@ -39,42 +40,42 @@ const styles = StyleSheet.create({
   },
   header: {
     position: "absolute",
-    top: 20,
-    left: 20,
+    top: hp('2%'),
+    left: wp('2%'),
   },
   greeting: {
-    fontSize: 30,
+    fontSize: wp('5%'),
     fontWeight: "bold",
     color: "#333",
   },
   profileContainer: {
     flexDirection: "column",
     alignItems: "center",
-    marginBottom: 50,
+    marginBottom: hp('6%'),
   },
   profileInfo: {
-    marginLeft: 10,
+    marginLeft: wp('2%'),
     flexDirection: "row",
   },
   label: {
-    fontSize: 25,
+    fontSize: wp('5%'),
     color: "#666",
-    marginBottom: 5,
+    marginBottom: hp('1.25%'),
   },
   value: {
-    fontSize: 25,
+    fontSize: wp('5%'),
     fontWeight: "bold",
     color: "#333", 
-    marginBottom: 15,
-    marginLeft: 20,
+    marginBottom: hp('2%'),
+    marginLeft: wp('4%'),
   },
   iconContainer: {
     flexDirection: "row",
   },
   iconButton: {
     backgroundColor: "#50C878",
-    padding: 10,
-    borderRadius: 20,
-    marginHorizontal: 10,
+    padding: wp('2%'),
+    borderRadius: wp('8%'),
+    marginHorizontal: wp('1.5%'),
   },
 });

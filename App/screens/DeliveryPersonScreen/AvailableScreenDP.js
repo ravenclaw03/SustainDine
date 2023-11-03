@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Text, StyleSheet, View, TouchableOpacity, ScrollView, Alert } from "react-native";
 import IconButton from "../../UI/IconButton";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 export default function AvailableScreenDP() {
   const [foodDonations, setFoodDonations] = useState([
@@ -123,20 +124,20 @@ export default function AvailableScreenDP() {
 const styles = StyleSheet.create({
   outerCont: {
     alignItems: "center",
-    paddingVertical: 20,
+    paddingVertical: hp('1.5%'),
   },
   cardContainer: {
-    width: 450,
-    height: 180,
-    margin: 20,
-    padding: 15,
-    borderRadius: 15,
+    width: wp('90%'), 
+    height: hp('18%'),
+    margin: wp('4%'),
+    padding: wp('3%'),
+    borderRadius: wp('3.75%'),
     backgroundColor: "#e3e3e3",
     justifyContent: "space-between",
   },
   label: {
-    fontSize: 16,
-    marginBottom: 5,
+    fontSize: wp('3.25%'),
+    marginBottom: hp('1%'),
   },
   noRequestContainer: {
     flex: 1,
@@ -144,24 +145,24 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   cont: {
-    height: 50,
-    width: 300,
-    marginTop: 300,
-    borderRadius: 20,
+    height: hp('6%'), 
+    width: wp('60%'),
+    marginTop: hp('35%'), 
+    borderRadius: wp('5%'),
     alignContent: "center",
     flexDirection: 'row',
     alignItems: "center",
     backgroundColor: "#0096FF",
   },
   text: {
-    marginLeft: 55,
-    fontSize: 18,
+    marginLeft: wp('10%'),
+    fontSize: wp('3.75%'),
   },
   refreshButton: {
     backgroundColor: "#0096FF",
-    padding: 10,
-    marginTop: 30,
-    borderRadius: 8,
+    padding: hp('1.25%'),
+    marginTop: hp('3%'), 
+    borderRadius: wp('2%'),
   },
   buttonText: {
     color: "white",
@@ -170,20 +171,20 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: 10,
+    marginTop: hp('2%'),
   },
   acceptButton: {
     backgroundColor: "green",
-    padding: 10,
-    width: 90,
+    padding: hp('1%'),
+    width: wp('22.5%'), 
     alignItems: "center",
-    borderRadius: 5,
+    borderRadius: hp('2%'),
   },
   declineButton: {
     backgroundColor: "red",
-    padding: 10,
-    width: 90,
+    padding: hp('1%'),
+    width: wp('22.5%'), 
     alignItems: "center",
-    borderRadius: 5,
+    borderRadius: hp('2%'),
   },
 });
