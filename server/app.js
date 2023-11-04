@@ -56,6 +56,7 @@ app.use(session(sessionConfig));
 
 app.get("/",(req,res)=>{
     res.send("Hello Bhai, welcome to the home page");
+
 })
 app.all('*',(req,res,next)=>{
     next(new ExpressError("Page Not found",404))
