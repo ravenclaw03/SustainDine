@@ -20,5 +20,16 @@ const ngoSchema=Joi.object({
     contact:Joi.string().length(10).pattern(/^[0-9]+$/).required()
 
 })
+const DeliveryPersonSchema=Joi.object({
+    username:Joi.string()
+            .token()
+            .min(3)
+            .max(30)
+            .required(),
+    firstName: Joi.string().alphanum().required(),
+    lastName:Joi.string().alphanum().required(),
+    contact:Joi.string().length(10).pattern(/^[0-9]+$/).required()
 
-export {userSchema,ngoSchema}
+})
+
+export {userSchema,ngoSchema,DeliveryPersonSchema}

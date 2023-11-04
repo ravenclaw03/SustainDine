@@ -2,6 +2,7 @@ import express from "express"
 import mongoose from "mongoose"
 import userRoutes from './routes/userRoutes.js'
 import ngoRoutes from './routes/ngoRoutes.js'
+import deliveryPersonRoutes from './routes/deliveryPersonRoutes.js'
 import cors from 'cors'
 import { PORT } from "./config.js"
 import ExpressError from "./utils/ExpressError.js"
@@ -16,6 +17,7 @@ app.use(express.json());
 //middleware for user and ngo routes
 app.use('/user',userRoutes);
 app.use('/ngo',ngoRoutes);
+app.use('/deliveryPerson',deliveryPersonRoutes);
 //middleware for CORS policy
 app.use(cors({
     origin:'http://localhost:3000/',
