@@ -1,11 +1,11 @@
 import express from 'express'
 const router=express.Router();
-import Dp from '../models/deliveryperson.js'
+import DeliveryPerson from '../models/deliveryperson.js'
 import catchAsync from '../utils/catchAsync.js';
 import ExpressError from '../utils/ExpressError.js';
-import {DeliveryPersonSchema} from '../Schemas.js';
+//import {DeliveryPersonSchema} from '../Schemas.js';
 
-const validateDp=(req,res,next)=>{
+const validateDeliveryPerson=(req,res,next)=>{
     const {error}=DeliveryPersonSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',')
@@ -16,22 +16,22 @@ const validateDp=(req,res,next)=>{
 }
 //Users routers
 router.get('/show',catchAsync(async(req,res)=>{
-    const Dps = await Dp.find({});
+    const DeliveryPersons = await DeliveryPerson.find({});
      return res.json({
-        count:Dps.length,
-        data: Dps
+        count:DeliveryPersons.length,
+        data: DeliveryPersons
      });
 }))
-router.post('/new',validateDp,catchAsync(async(req,res)=>{
-    const newDp= new Dp(req.body)
-    await newDp.save();
+router.post('/new',validateDeliveryPerson,catchAsync(async(req,res)=>{
+    const newDeliveryPerson= new DeliveryPerson(req.body)
+    await newDeliveryPerson.save();
     await res.send("User Created Successfully");
 }))
 router.get('/:id',catchAsync(async(req,res)=>{
-    const dp= await Dp.findById(req.params.id);
-    return res.json(dp);
+    const DeliveryPerson= await DeliveryPerson.findById(req.params.id);
+    return res.json(DeliveryPerson);
 }))
-router.put('/:id',validateDp,catchAsync(async(req,res)=>{
+router.put('/:id',validateDeliveryPerson,catchAsync(async(req,res)=>{
     const result= await User.findByIdAndUpdate(req.params.id,req.body);
     if(result)
     {
@@ -42,7 +42,7 @@ router.put('/:id',validateDp,catchAsync(async(req,res)=>{
     }
 }))
 router.delete('/:id',catchAsync(async(req,res)=>{
-    const result= await Dp.findByIdAndDelete(req.params.id);
+    const result= await DeliveryPerson.findByIdAndDelete(req.params.id);
     if(result)
     {
         res.send("Deleted successfully");

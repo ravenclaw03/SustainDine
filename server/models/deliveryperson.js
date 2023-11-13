@@ -9,4 +9,4 @@ const DeliveryPersonSchema=new Schema(
     }
 );
 
-export default mongoose.model('DP',DeliveryPersonSchema);
+export default mongoose.model('DeliveryPerson',DeliveryPersonSchema);
