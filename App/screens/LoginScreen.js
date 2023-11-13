@@ -16,6 +16,11 @@ import { themeColors } from "../theme";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { showMessage } from "react-native-flash-message";
+import { authenticate } from "../util/auth.js"
+import axios from 'axios';
+import { login } from '../util/auth';
+
 
 const data = [
   {
@@ -40,6 +45,7 @@ export default function LoginScreen() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [userTypeError, setUserTypeError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const validateEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -58,8 +64,6 @@ export default function LoginScreen() {
     return true;
   };
 
-
-
   const renderLabel = () => {
     if (value || isFocus) {
       return (
@@ -69,6 +73,86 @@ export default function LoginScreen() {
       );
     }
     return null;
+  };
+
+  const handleLogin = async () => {
+    let isValid = true;
+
+    if (!validateEmail() || !validatePassword()) {
+      isValid = false;
+    }
+    if (value == null) {
+      setUserTypeError("Please select a user type");
+      isValid = false;
+    } else {
+      setUserTypeError("");
+    }
+
+
+    if (isValid) {
+      try {
+        const token = await login(email, password);
+        // Axios.post('http://localhost:4000/login', user);
+        // console.log("User created successfully", response.data);
+        console.log(email)
+        console.log(password)
+
+        authCtx.authenticate(token);
+
+        if (token) {
+          // Display a success message
+
+          showMessage({
+            message: 'Login Successful',
+            type: 'success',
+          });
+
+          // Based on the selected user type, navigate to different screens
+          if (value === '1') {
+            navigation.navigate('Donor');
+          } else if (value === '2') {
+            navigation.navigate('NGO');
+          } else if (value === '3') {
+            navigation.navigate('DP');
+          }
+        }
+      } catch (error) {
+        Alert.alert("Error", "Authentication failed. Please try again.");
+      }
+    } else {
+      Alert.alert("Error", "Please fill in all the fields correctly.");
+    }
+
+
+
+    // if (isValid) {
+    //   setIsLoading(true);
+
+    //   // Simulating an asynchronous login process
+    //   setTimeout(() => {
+    //     setIsLoading(false);
+
+    //     showMessage({
+    //       message: 'Login Successful',
+    //       type: 'success',
+    //     });
+
+    //     // Navigating to the respective screens after a delay
+    //     setTimeout(() => {
+    //       if (value === '1') {
+    //         navigation.navigate('Donor');
+    //       } else if (value === '2') {
+    //         navigation.navigate('NGO');
+    //       } else if (value === '3') {
+    //         navigation.navigate('DP');
+    //       }
+    //     }, 100); // Adjust the delay time as needed
+    //   }, 6000); // Simulating a login process, adjust time as needed
+    // } else {
+    //   Alert.alert('Error', 'Please fill in all the fields correctly.');
+    // }
+
+
   };
 
   const navigation = useNavigation();
@@ -151,30 +235,19 @@ export default function LoginScreen() {
 
           <TouchableOpacity
             style={styles.loginButton}
-            onPress={() => {
-              let isValid = true;
-              if (!validateEmail() || !validatePassword()) {
-                isValid = false;
-              }
-              if (value == null) {
-                setUserTypeError("Please select a user type");
-                isValid = false;
-              } else {
-                setUserTypeError("");
-              }
-
-              if (isValid) {
-                // Proceed with sign-up logic
-              } else {
-                Alert.alert(
-                  "Error",
-                  "Please fill in all the fields correctly."
-                );
-              }
-            }}
+            onPress={handleLogin}
           >
             <Text style={styles.login}>Login</Text>
           </TouchableOpacity>
+          {isLoading && (
+            <View style={styles.overlay}>
+              <Image
+                source={require("../assets/images/login.gif")}
+                style={styles.loginIMG}
+              />
+
+            </View>
+          )}
         </View>
         <Text style={styles.or}>Or</Text>
         <View style={styles.bottomCont}>
@@ -310,5 +383,18 @@ const styles = StyleSheet.create({
   errorText: {
     color: "red",
     marginLeft: wp('4%'),
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loginIMG: {
+    width: wp('65%'),
+    height: wp('65%'),
   },
 });

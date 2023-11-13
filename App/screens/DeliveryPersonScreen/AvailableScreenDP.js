@@ -47,16 +47,16 @@ export default function AvailableScreenDP() {
   const handleDecline = (index) => {
     console.log("Declined donation at index:", index);
     Alert.alert(
-      'Order Declined',
-      'Do you want to ask again?',
+      'Order Declined!',
+      'Are you sure you want to decline the order?',
       [
         {
-          text: 'Yes',
+          text: 'No',
           onPress: () => console.log('Ask again'),
           style: 'default',
         },
         {
-          text: 'No',
+          text: 'Yes',
           onPress: () => {
             setFoodDonations((prevDonations) => {
               const updatedDonations = prevDonations.filter((_, i) => i !== index);
