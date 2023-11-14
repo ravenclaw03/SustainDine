@@ -14,18 +14,14 @@ import MongoStore from "connect-mongo";
 import passport from "passport";
 import "./auth/mongoAuth.js"
 import "./auth/googleAuth.js"
+import https from "https"
+import fs from "fs"
 
 const app = express();
 //middleware for parsing req body in json
 app.use(express.json());
 //middleware for CORS policy
-app.use(
-  cors({
-    origin: "http://localhost:3000/",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type"],
-  })
-);
+app.use(cors());
 
 const mongoDBURL = process.env.DB_URL;
 //session
