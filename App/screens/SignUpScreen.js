@@ -46,6 +46,7 @@ export default function SignUpScreen() {
   const [userTypeError, setUserTypeError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+
   const validateFullName = () => {
     if (fullName.trim() === "") {
       setFullNameError("Full Name is required");
@@ -109,49 +110,18 @@ export default function SignUpScreen() {
     }
 
 
-    // if (isValid) {
-    //   try {
-    //     const token = await login(email, password);
-
-    //     if (token) {
-    //       // Display a success message
-    //       showMessage({
-    //         message: 'Login Successful',
-    //         type: 'success',
-    //       });
-
-    //       // Based on the selected user type, navigate to different screens
-    //       if (value === '1') {
-    //         navigation.navigate('Donor');
-    //       } else if (value === '2') {
-    //         navigation.navigate('NGO');
-    //       } else if (value === '3') {
-    //         navigation.navigate('DP');
-    //       }
-    //     }
-    //   } catch (error) {
-    //     Alert.alert("Error", "Authentication failed. Please try again.");
-    //   }
-    // } else {
-    //   Alert.alert("Error", "Please fill in all the fields correctly.");
-    // }
-
-
-
     if (isValid) {
-      setIsLoading(true);
+      try {
+        const token = await signup(email, password);
 
-      // Simulating an asynchronous login process
-      setTimeout(() => {
-        setIsLoading(false);
+        if (token) {
+          // Display a success message
+          showMessage({
+            message: 'Login Successful',
+            type: 'success',
+          });
 
-        showMessage({
-          message: 'Login Successful',
-          type: 'success',
-        });
-
-        // Navigating to the respective screens after a delay
-        setTimeout(() => {
+          // Based on the selected user type, navigate to different screens
           if (value === '1') {
             navigation.navigate('Donor');
           } else if (value === '2') {
@@ -159,11 +129,42 @@ export default function SignUpScreen() {
           } else if (value === '3') {
             navigation.navigate('DP');
           }
-        }, 100); // Adjust the delay time as needed
-      }, 6000); // Simulating a login process, adjust time as needed
+        }
+      } catch (error) {
+        Alert.alert("Error", "Authentication failed. Please try again.");
+      }
     } else {
-      Alert.alert('Error', 'Please fill in all the fields correctly.');
+      Alert.alert("Error", "Please fill in all the fields correctly.");
     }
+
+
+
+    // if (isValid) {
+    //   setIsLoading(true);
+
+    //   // Simulating an asynchronous login process
+    //   setTimeout(() => {
+    //     setIsLoading(false);
+
+    //     showMessage({
+    //       message: 'Login Successful',
+    //       type: 'success',
+    //     });
+
+    //     // Navigating to the respective screens after a delay
+    //     setTimeout(() => {
+    //       if (value === '1') {
+    //         navigation.navigate('Donor');
+    //       } else if (value === '2') {
+    //         navigation.navigate('NGO');
+    //       } else if (value === '3') {
+    //         navigation.navigate('DP');
+    //       }
+    //     }, 100); // Adjust the delay time as needed
+    //   }, 6000); // Simulating a login process, adjust time as needed
+    // } else {
+    //   Alert.alert('Error', 'Please fill in all the fields correctly.');
+    // }
   };
 
   const navigation = useNavigation();

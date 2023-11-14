@@ -19,7 +19,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { showMessage } from "react-native-flash-message";
 import { authenticate } from "../util/auth.js"
 import axios from 'axios';
-import { login } from '../util/auth';
+import { login } from "../util/auth.js";
 
 
 const data = [
@@ -46,6 +46,11 @@ export default function LoginScreen() {
   const [passwordError, setPasswordError] = useState("");
   const [userTypeError, setUserTypeError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  // async function login({email,password}){
+  //   setIsLoading(true);
+  //   await loginUser(email,password);
+  // }
 
   const validateEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -89,17 +94,23 @@ export default function LoginScreen() {
     }
 
 
+
+
     if (isValid) {
+      const response = await axios.post('http://10.0.0.2:4000/login', {
+          email,
+          password,
+        });
       try {
-        const token = await login(email, password);
-        // Axios.post('http://localhost:4000/login', user);
-        // console.log("User created successfully", response.data);
-        console.log(email)
-        console.log(password)
+        console.log(email,password)
 
-        authCtx.authenticate(token);
+        
+        //const token = response.data.token;
 
-        if (token) {
+        //console.log(token)
+
+
+        //if (token) {
           // Display a success message
 
           showMessage({
@@ -115,7 +126,7 @@ export default function LoginScreen() {
           } else if (value === '3') {
             navigation.navigate('DP');
           }
-        }
+        //}
       } catch (error) {
         Alert.alert("Error", "Authentication failed. Please try again.");
       }
@@ -126,32 +137,50 @@ export default function LoginScreen() {
 
 
     // if (isValid) {
-    //   setIsLoading(true);
+    //   try {
 
-    //   // Simulating an asynchronous login process
-    //   setTimeout(() => {
-    //     setIsLoading(false);
-
-    //     showMessage({
-    //       message: 'Login Successful',
-    //       type: 'success',
+    //     // const token = await login(email, password);
+    //     // const response = await axios.post('http://localhost:4000/login', {
+    //     //   email: email,
+    //     //   password: password,
+    //     // });
+        
+    //     const response = await axios.post('http://localhost:4000/login', {
+    //       email,
+    //       password,
     //     });
 
-    //     // Navigating to the respective screens after a delay
+    //     const token = response.data.token;
+
+    //     setIsLoading(true);
+    
+    //     // Simulating an asynchronous login process
     //     setTimeout(() => {
-    //       if (value === '1') {
-    //         navigation.navigate('Donor');
-    //       } else if (value === '2') {
-    //         navigation.navigate('NGO');
-    //       } else if (value === '3') {
-    //         navigation.navigate('DP');
-    //       }
-    //     }, 100); // Adjust the delay time as needed
-    //   }, 6000); // Simulating a login process, adjust time as needed
+    //       setIsLoading(false);
+    
+    //       showMessage({
+    //         message: 'Login Successful',
+    //         type: 'success',
+    //       });
+    
+    //       // Navigating to the respective screens after a delay
+    //       setTimeout(() => {
+    //         if (value === '1') {
+    //           navigation.navigate('Donor');
+    //         } else if (value === '2') {
+    //           navigation.navigate('NGO');
+    //         } else if (value === '3') {
+    //           navigation.navigate('DP');
+    //         }
+    //       }, 100); // Adjust the delay time as needed
+    //     }, 6000); // Simulating a login process, adjust time as needed
+    //   } catch (error) {
+    //     Alert.alert('Error', 'Authentication failed. Please try again.');
+    //   }
     // } else {
     //   Alert.alert('Error', 'Please fill in all the fields correctly.');
     // }
-
+    
 
   };
 
