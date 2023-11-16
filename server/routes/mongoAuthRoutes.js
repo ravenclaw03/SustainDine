@@ -26,10 +26,10 @@ router.get("/login", (req, res) => {
 });
 router.post(
   "/login",
-  passport.authenticate("local", { failureRedirect: "",successMessage:"Welcome" }),
-  (req, res) => {
-    //res.send("Welcome user");
-    res.status(200).send("welcome user");
+  passport.authenticate("local", { failureRedirect: ""}),
+  async(req, res) => {
+    const user = await User.findOne({email:req.user.email});
+    return res.json(user);
   }
 );
 router.get("/logout", (req, res, next) => {
