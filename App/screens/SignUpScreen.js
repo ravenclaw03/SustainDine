@@ -16,7 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { showMessage } from "react-native-flash-message";
-
+import axios from "axios";
 const data = [
   {
     label: "Donor",
@@ -112,10 +112,14 @@ export default function SignUpScreen() {
 
     if (isValid) {
       try {
-         const response = await axios.post("https://minor-project-wss9.vercel.app/register",{email,password,contact,fullName});
+         const response = await axios.post("https://minor-project-wss9.vercel.app/register",{email,password,mobileno,fullName});
           //console.log(response.data.fullName);
-          Alert.alert("Success",`Welcome ${response.data.fullName}`)
-  
+          if(response.data.fullName)
+          {Alert.alert("You're Registered!",`Welcome ${response.data.fullName}`)}
+          else{
+            Alert.alert("Error","Email Already exists")
+          }
+          
 
           // Based on the selected user type, navigate to different screens
           if (value === '1') {
@@ -127,7 +131,8 @@ export default function SignUpScreen() {
           }
         
       } catch (error) {
-        Alert.alert("Error", response.data);
+        console.log(error)
+        Alert.alert("Error", "sorry bhai ");
       }
     } else {
       Alert.alert("Error", "Please fill in all the fields correctly.");
