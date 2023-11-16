@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowLeftIcon } from "react-native-heroicons/solid";
 import { themeColors } from "../theme";
@@ -20,10 +19,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { showMessage } from "react-native-flash-message";
-import { authenticate } from "../util/auth.js";
 import axios from "axios";
-import { login } from "../util/auth.js";
 
 
 const data = [
@@ -68,7 +64,7 @@ export default function LoginScreen() {
     }
     return true;
   };
-
+  
   const renderLabel = () => {
     if (value || isFocus) {
       return (
@@ -79,6 +75,14 @@ export default function LoginScreen() {
     }
     return null;
   };
+
+  const googleLogin = async () => {
+    console.log("Hello google")
+  }
+
+  const forgot = async () => {
+    Alert.alert("😵‍💫🤯","Contact Admin for further help!")
+  }
 
   const handleLogin = async () => {
     let isValid = true;
@@ -92,7 +96,7 @@ export default function LoginScreen() {
     } else {
       setUserTypeError("");
     }
-    //console.log(email,password)
+
     if (isValid) {
       try {
         setIsLoading(true);
@@ -215,7 +219,7 @@ export default function LoginScreen() {
             }}
           />
           <Text style={styles.errorText}>{passwordError}</Text>
-          <TouchableOpacity style={styles.forgotCont}>
+          <TouchableOpacity style={styles.forgotCont} onPress={forgot}>
             <Text style={styles.forgotText}>Forgot Password?</Text>
           </TouchableOpacity>
 
@@ -264,21 +268,9 @@ export default function LoginScreen() {
         </View>
         <Text style={styles.or}>Or</Text>
         <View style={styles.bottomCont}>
-          <TouchableOpacity style={styles.bottomInnerCont}>
+          <TouchableOpacity style={styles.bottomInnerCont} onPress={googleLogin}>
             <Image
               source={require("../assets/icons/google.png")}
-              style={styles.img}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.bottomInnerCont}>
-            <Image
-              source={require("../assets/icons/apple.png")}
-              style={styles.img}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.bottomInnerCont}>
-            <Image
-              source={require("../assets/icons/facebook.png")}
               style={styles.img}
             />
           </TouchableOpacity>
@@ -313,6 +305,7 @@ const styles = StyleSheet.create({
   imgCont: {
     flexDirection: "row",
     justifyContent: "center",
+    marginTop: wp("4%"),
   },
   backbutton: {
     backgroundColor: "orange",
@@ -329,6 +322,7 @@ const styles = StyleSheet.create({
     paddingTop: hp("4%"),
     borderTopLeftRadius: wp("20%"),
     borderTopRightRadius: wp("20%"),
+    marginTop:wp("4%"),
   },
   attributeName: {
     color: "black",
@@ -377,13 +371,16 @@ const styles = StyleSheet.create({
     gap: wp("10%"),
   },
   bottomInnerCont: {
-    padding: wp("2%"),
-    backgroundColor: "#F3F4F6",
-    borderRadius: wp("4%"),
+    padding: wp('2%'),
+    backgroundColor: "white",
+    borderRadius: wp('8%'),
+    borderWidth: 1,
+    borderColor: "gray",
   },
   img: {
-    width: wp("8%"),
+    width: wp("50%"),
     height: wp("8%"),
+    borderRadius: 8,
   },
   lastCont: {
     display: "flex",

@@ -95,6 +95,10 @@ export default function SignUpScreen() {
     return null;
   };
 
+  const googleLogin = async () => {
+    console.log("Hello google")
+  }
+
   const handleSignup = async () => {
     let isValid = true;
     if (
@@ -303,21 +307,9 @@ export default function SignUpScreen() {
         </View>
         <Text style={styles.or}>Or</Text>
         <View style={styles.bottomCont}>
-          <TouchableOpacity style={styles.bottomInnerCont}>
+          <TouchableOpacity style={styles.bottomInnerCont} onPress={googleLogin}>
             <Image
               source={require("../assets/icons/google.png")}
-              style={styles.img}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.bottomInnerCont}>
-            <Image
-              source={require("../assets/icons/apple.png")}
-              style={styles.img}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.bottomInnerCont}>
-            <Image
-              source={require("../assets/icons/facebook.png")}
               style={styles.img}
             />
           </TouchableOpacity>
@@ -407,12 +399,15 @@ const styles = StyleSheet.create({
   },
   bottomInnerCont: {
     padding: wp('2%'),
-    backgroundColor: "#F3F4F6",
-    borderRadius: wp('3%'),
+    backgroundColor: "white",
+    borderRadius: wp('8%'),
+    borderWidth: 1,
+    borderColor: "gray",
   },
   img: {
-    width: wp('8%'),
-    height: wp('8%'),
+    width: wp("50%"),
+    height: wp("8%"),
+    borderRadius: 8,
   },
   lastCont: {
     display: "flex",

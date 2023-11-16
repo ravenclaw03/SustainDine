@@ -3,8 +3,32 @@ import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons"; 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useRoute } from "@react-navigation/native";
+import { Alert } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 export default function AccountScreenDonor({ data}) {
+  const navigation = useNavigation();
+
+  const handleLogout = () => {
+    Alert.alert(
+      "Logout",
+      "Are you sure you want to logout?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Logout",
+          onPress: () => {
+            navigation.navigate("Welcome");
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   const route = useRoute();
   const name = route.params?.passedData || 'Default Value';
   return (
@@ -27,7 +51,7 @@ export default function AccountScreenDonor({ data}) {
         <TouchableOpacity style={styles.iconButton}>
           <AntDesign name="edit" size={24} color="#333" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.iconButton}>
+        <TouchableOpacity style={styles.iconButton} onPress={handleLogout}>
           <AntDesign name="logout" size={24} color="#333" />
         </TouchableOpacity>
       </View>
