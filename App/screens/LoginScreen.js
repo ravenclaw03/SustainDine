@@ -5,6 +5,7 @@ import {
   Image,
   TextInput,
   StyleSheet,
+  ScrollView,
   Alert,
 } from "react-native";
 import React, { useState } from "react";
@@ -23,6 +24,7 @@ import { showMessage } from "react-native-flash-message";
 import { authenticate } from "../util/auth.js";
 import axios from "axios";
 import { login } from "../util/auth.js";
+
 
 const data = [
   {
@@ -48,11 +50,7 @@ export default function LoginScreen() {
   const [passwordError, setPasswordError] = useState("");
   const [userTypeError, setUserTypeError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  // async function login({email,password}){
-  //   setIsLoading(true);
-  //   await loginUser(email,password);
-  // }
+  const err ="";
 
   const validateEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -97,30 +95,31 @@ export default function LoginScreen() {
     //console.log(email,password)
     if (isValid) {
       try {
-        // const response = await axios.post('http://localhost:4000/login', {
-        //   email,
-        //   password
-        // });
+        setIsLoading(true);
         const response = await axios.post("https://minor-project-wss9.vercel.app/login",{email,password});
-        //console.log(response.data.fullName);
-        Alert.alert("Success",`Welcome ${response.data.fullName}`)
+        console.log(response.data);
 
-        showMessage({
-          message: "Login Successful",
-          type: "success",
-        });
 
         // Based on the selected user type, navigate to different screens
-        if (value === "1") {
-          navigation.navigate("Donor");
-        } else if (value === "2") {
-          navigation.navigate("NGO");
-        } else if (value === "3") {
-          navigation.navigate("DP");
-        }
+        setTimeout(() => {
+            Alert.alert("Success",`Welcome ${response.data.fullName}`)
+            setIsLoading(false);
+            // Navigating to the respective screens after a delay
+            setTimeout(() => {
+              if (value === '1') {
+                navigation.navigate('Donor',{passedData: response.data.name});
+              } else if (value === '2') {
+                navigation.navigate('NGO');
+              } else if (value === '3') {
+                navigation.navigate('DP');
+              }
+            }, 100); // Adjust the delay time as needed
+          }, 6000);
+
       } catch (error) {
+        setIsLoading(false);
         console.log(error);
-        Alert.alert("Error", "Authentication failed. Please try again.");
+        Alert.alert("Error Authentication failed", "Please check your email and password or try again later.");
       }
     } else {
       Alert.alert("Error", "Please fill in all the fields correctly.");
@@ -174,6 +173,7 @@ export default function LoginScreen() {
 
   const navigation = useNavigation();
   return (
+    <ScrollView>
     <View style={styles.outermostCont}>
       <SafeAreaView className="flex ">
         <View style={styles.backArrowView}>
@@ -291,14 +291,20 @@ export default function LoginScreen() {
         </View>
       </View>
     </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+
+  },
   outermostCont: {
     flex: 1,
     backgroundColor: themeColors.bg,
     marginTop: hp("1%"),
+    height: 1050,
   },
   backArrowView: {
     flexDirection: "row",

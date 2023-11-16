@@ -5,6 +5,7 @@ import {
   Image,
   TextInput,
   StyleSheet,
+  ScrollView,
   Alert,
 } from "react-native";
 import React, { useState } from "react";
@@ -17,6 +18,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { showMessage } from "react-native-flash-message";
 import axios from "axios";
+
+
 const data = [
   {
     label: "Donor",
@@ -112,27 +115,41 @@ export default function SignUpScreen() {
 
     if (isValid) {
       try {
+         setIsLoading(true);
          const response = await axios.post("https://minor-project-wss9.vercel.app/register",{email,password,mobileno,fullName});
-          //console.log(response.data.fullName);
-          if(response.data.fullName)
-          {Alert.alert("You're Registered!",`Welcome ${response.data.fullName}`)}
-          else{
-            Alert.alert("Error","Email Already exists")
-          }
-          
-
+  
           // Based on the selected user type, navigate to different screens
-          if (value === '1') {
-            navigation.navigate('Donor');
-          } else if (value === '2') {
-            navigation.navigate('NGO');
-          } else if (value === '3') {
-            navigation.navigate('DP');
-          }
+          setTimeout(() => {
+            if (response.data.fullName) {
+              Alert.alert("You're Registered!", `Welcome ${response.data.fullName}`);
+            } else {
+              throw new Error("Registration failed: Email Already exists");
+            }
+            setIsLoading(false);
+            // Navigating to the respective screens after a delay
+            setTimeout(() => {
+              if (value === '1') {
+                navigation.navigate('Donor');
+              } else if (value === '2') {
+                navigation.navigate('NGO');
+              } else if (value === '3') {
+                navigation.navigate('DP');
+              }
+            }, 100); // Adjust the delay time as needed
+          }, 6000);
         
       } catch (error) {
-        console.log(error)
-        Alert.alert("Error", "sorry bhai ");
+        setIsLoading(false);
+        //console.log(error);
+        //Alert.alert("Error Authentication failed", "Please try again.");
+        if (error.response) {
+          console.error("Server responded with an error:", error.response.data);
+        } else if (error.request) {
+          console.error("No response received from the server:", error.request);
+        } else {
+          console.error("Error setting up the request:", error.message);
+        }
+        Alert.alert("Error", "An error occurred. Please try again later.");
       }
     } else {
       Alert.alert("Error", "Please fill in all the fields correctly.");
@@ -170,6 +187,7 @@ export default function SignUpScreen() {
 
   const navigation = useNavigation();
   return (
+    <ScrollView>
     <View style={styles.outermostCont}>
       <SafeAreaView className="flex">
         <View style={styles.backArrowView}>
@@ -312,14 +330,19 @@ export default function SignUpScreen() {
         </View>
       </View>
     </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+  },
   outermostCont: {
     flex: 1,
     backgroundColor: themeColors.bg,
     marginTop: hp('1%'),
+    height: 1050,
   },
   backArrowView: {
     flexDirection: "row",

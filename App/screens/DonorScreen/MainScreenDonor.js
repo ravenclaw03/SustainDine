@@ -10,12 +10,13 @@ import AccountScreenDonor from "./AccountScreenDonor";
 
 const Tab = createBottomTabNavigator();
 
-export default function MainScreenDonor() {
+export default function MainScreenDonor({ route }) {
+  const { name } = route.params;
+
   return (
     <Tab.Navigator
       screenOptions={{
         headerStyle: { backgroundColor: "orange" },
-
       }}
     >
       <Tab.Screen
@@ -26,8 +27,7 @@ export default function MainScreenDonor() {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="add-circle-outline" size={28} color={color} />
           ),
-        }}
-      />
+        }} />
       <Tab.Screen
         name="Active Order Details"
         component={TrackScreenDonor}
@@ -36,19 +36,19 @@ export default function MainScreenDonor() {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="analytics-outline" size={35} color={color} />
           ),
-        }}
-      />
-
+        }} />
       <Tab.Screen
         name="Account Details"
         component={AccountScreenDonor}
+        initialParams={{ data: name }}
         options={{
           tabBarLabel: "Account",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-circle" size={30} color={color} />
           ),
-        }}
-      />
+        }}/> 
+      
+
     </Tab.Navigator>
   );
 }

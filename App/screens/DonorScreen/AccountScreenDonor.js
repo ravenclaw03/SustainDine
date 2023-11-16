@@ -2,8 +2,11 @@ import React from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons"; 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { useRoute } from "@react-navigation/native";
 
-export default function AccountScreenDonor() {
+export default function AccountScreenDonor({ data}) {
+  const route = useRoute();
+  const name = route.params?.passedData || 'Default Value';
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -12,7 +15,8 @@ export default function AccountScreenDonor() {
       <View style={styles.profileContainer}>
         <View style={styles.profileInfo}>
           <Text style={styles.label}>Name:</Text>
-          <Text style={styles.value}>ABC </Text>
+          
+          <Text style={styles.value}>{data|| 'Default Name'} </Text>
         </View>
         <View style={styles.profileInfo}>
           <Text style={styles.label}>Email:</Text>
