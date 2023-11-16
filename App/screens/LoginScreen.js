@@ -102,19 +102,15 @@ export default function LoginScreen() {
         //   password
         // });
         const response = await axios.post("https://minor-project-wss9.vercel.app/login",{email,password});
-        console.log(response.data);
-        //const token = response.data.token;
-        //console.log(token)
-        Alert.alert("Success",`Welcome ${email}`)
-        //if (token) {
-        // Display a success message
+        //console.log(response.data.fullName);
+        Alert.alert("Success",`Welcome ${response.data.fullName}`)
 
         showMessage({
           message: "Login Successful",
           type: "success",
         });
 
-        // Based on the selected user type, navigate to cd different screens
+        // Based on the selected user type, navigate to different screens
         if (value === "1") {
           navigation.navigate("Donor");
         } else if (value === "2") {

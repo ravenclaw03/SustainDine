@@ -13,11 +13,11 @@ router.post(
       const newUser = await User.register(user, password);
       req.login(newUser, (err) => {
         if (err) return next(err);
-        res.send("registered and logged in");
+        return res.json(newUser)
       });
       //return res.json(newUser);
     } catch (error) {
-      res.send(error.message);
+      return res.json(error.message);
     }
   })
 );

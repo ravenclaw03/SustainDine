@@ -112,14 +112,10 @@ export default function SignUpScreen() {
 
     if (isValid) {
       try {
-        const token = await signup(email, password);
-
-        if (token) {
-          // Display a success message
-          showMessage({
-            message: 'Login Successful',
-            type: 'success',
-          });
+         const response = await axios.post("https://minor-project-wss9.vercel.app/register",{email,password,contact,fullName});
+          //console.log(response.data.fullName);
+          Alert.alert("Success",`Welcome ${response.data.fullName}`)
+  
 
           // Based on the selected user type, navigate to different screens
           if (value === '1') {
@@ -129,9 +125,9 @@ export default function SignUpScreen() {
           } else if (value === '3') {
             navigation.navigate('DP');
           }
-        }
+        
       } catch (error) {
-        Alert.alert("Error", "Authentication failed. Please try again.");
+        Alert.alert("Error", response.data);
       }
     } else {
       Alert.alert("Error", "Please fill in all the fields correctly.");
