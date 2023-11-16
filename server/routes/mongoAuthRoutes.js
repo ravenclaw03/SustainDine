@@ -21,12 +21,15 @@ router.post(
     }
   })
 );
-
+router.get("/login", (req, res) => {
+  //res.render("")
+});
 router.post(
   "/login",
-  passport.authenticate("local", { failureRedirect: "/home" }),
+  passport.authenticate("local", { failureRedirect: "",successMessage:"Welcome" }),
   (req, res) => {
-    res.send("Welcome user");
+    //res.send("Welcome user");
+    res.status(200).send("welcome user");
   }
 );
 router.get("/logout", (req, res, next) => {

@@ -14,8 +14,6 @@ import MongoStore from "connect-mongo";
 import passport from "passport";
 import "./auth/mongoAuth.js"
 import "./auth/googleAuth.js"
-import https from "https"
-import fs from "fs"
 
 const app = express();
 //middleware for parsing req body in json

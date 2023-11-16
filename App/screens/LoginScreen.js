@@ -15,12 +15,14 @@ import { ArrowLeftIcon } from "react-native-heroicons/solid";
 import { themeColors } from "../theme";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 import { showMessage } from "react-native-flash-message";
-import { authenticate } from "../util/auth.js"
-import axios from 'axios';
+import { authenticate } from "../util/auth.js";
+import axios from "axios";
 import { login } from "../util/auth.js";
-
 
 const data = [
   {
@@ -92,49 +94,41 @@ export default function LoginScreen() {
     } else {
       setUserTypeError("");
     }
-
-
-
-
+    //console.log(email,password)
     if (isValid) {
-      const response = await axios.post('http://10.0.0.2:4000/login', {
-          email,
-          password,
-        });
       try {
-        console.log(email,password)
-
-        
+        // const response = await axios.post('http://localhost:4000/login', {
+        //   email,
+        //   password
+        // });
+        const response = await axios.post("https://minor-project-wss9.vercel.app/login",{email,password});
+        console.log(response.data);
         //const token = response.data.token;
-
         //console.log(token)
-
-
+        Alert.alert("Success",`Welcome ${email}`)
         //if (token) {
-          // Display a success message
+        // Display a success message
 
-          showMessage({
-            message: 'Login Successful',
-            type: 'success',
-          });
+        showMessage({
+          message: "Login Successful",
+          type: "success",
+        });
 
-          // Based on the selected user type, navigate to different screens
-          if (value === '1') {
-            navigation.navigate('Donor');
-          } else if (value === '2') {
-            navigation.navigate('NGO');
-          } else if (value === '3') {
-            navigation.navigate('DP');
-          }
-        //}
+        // Based on the selected user type, navigate to cd different screens
+        if (value === "1") {
+          navigation.navigate("Donor");
+        } else if (value === "2") {
+          navigation.navigate("NGO");
+        } else if (value === "3") {
+          navigation.navigate("DP");
+        }
       } catch (error) {
+        console.log(error);
         Alert.alert("Error", "Authentication failed. Please try again.");
       }
     } else {
       Alert.alert("Error", "Please fill in all the fields correctly.");
     }
-
-
 
     // if (isValid) {
     //   try {
@@ -144,7 +138,7 @@ export default function LoginScreen() {
     //     //   email: email,
     //     //   password: password,
     //     // });
-        
+
     //     const response = await axios.post('http://localhost:4000/login', {
     //       email,
     //       password,
@@ -153,16 +147,16 @@ export default function LoginScreen() {
     //     const token = response.data.token;
 
     //     setIsLoading(true);
-    
+
     //     // Simulating an asynchronous login process
     //     setTimeout(() => {
     //       setIsLoading(false);
-    
+
     //       showMessage({
     //         message: 'Login Successful',
     //         type: 'success',
     //       });
-    
+
     //       // Navigating to the respective screens after a delay
     //       setTimeout(() => {
     //         if (value === '1') {
@@ -180,8 +174,6 @@ export default function LoginScreen() {
     // } else {
     //   Alert.alert('Error', 'Please fill in all the fields correctly.');
     // }
-    
-
   };
 
   const navigation = useNavigation();
@@ -262,10 +254,7 @@ export default function LoginScreen() {
             <Text style={styles.errorText}>{userTypeError}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.loginButton}
-            onPress={handleLogin}
-          >
+          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
             <Text style={styles.login}>Login</Text>
           </TouchableOpacity>
           {isLoading && (
@@ -274,7 +263,6 @@ export default function LoginScreen() {
                 source={require("../assets/images/login.gif")}
                 style={styles.loginIMG}
               />
-
             </View>
           )}
         </View>
@@ -314,7 +302,7 @@ const styles = StyleSheet.create({
   outermostCont: {
     flex: 1,
     backgroundColor: themeColors.bg,
-    marginTop: hp('1%'),
+    marginTop: hp("1%"),
   },
   backArrowView: {
     flexDirection: "row",
@@ -326,31 +314,31 @@ const styles = StyleSheet.create({
   },
   backbutton: {
     backgroundColor: "orange",
-    padding: wp('2%'),
-    borderTopRightRadius: wp('2%'), 
-    borderBottomLeftRadius: wp('2%'), 
-    marginLeft: wp('6%'),
+    padding: wp("2%"),
+    borderTopRightRadius: wp("2%"),
+    borderBottomLeftRadius: wp("2%"),
+    marginLeft: wp("6%"),
   },
   innerCont: {
     flex: 1,
     backgroundColor: "white",
-    paddingLeft: wp('8%'), 
-    paddingRight: wp('8%'), 
-    paddingTop: hp('4%'), 
-    borderTopLeftRadius: wp('20%'),
-    borderTopRightRadius: wp('20%'),
+    paddingLeft: wp("8%"),
+    paddingRight: wp("8%"),
+    paddingTop: hp("4%"),
+    borderTopLeftRadius: wp("20%"),
+    borderTopRightRadius: wp("20%"),
   },
   attributeName: {
     color: "black",
     fontWeight: "400",
-    marginLeft: wp('3%'),
+    marginLeft: wp("3%"),
   },
   inputBox: {
-    padding: wp('3.25%'), 
+    padding: wp("3.25%"),
     backgroundColor: "#F3F4F6",
     color: "#4A5568",
-    borderRadius: wp('3%'),
-    marginBottom: hp('1%'), 
+    borderRadius: wp("3%"),
+    marginBottom: hp("1%"),
   },
   forgotCont: {
     display: "flex",
@@ -358,48 +346,48 @@ const styles = StyleSheet.create({
   },
   forgotText: {
     color: "black",
-    marginBottom: hp('4%'),
+    marginBottom: hp("4%"),
   },
   loginButton: {
-    paddingTop: hp('1.5%'), 
-    paddingBottom: hp('1.5%'), 
+    paddingTop: hp("1.5%"),
+    paddingBottom: hp("1.5%"),
     backgroundColor: "orange",
-    borderRadius: wp('4%'),
+    borderRadius: wp("4%"),
   },
   login: {
-    fontSize: wp('3.5%'),
+    fontSize: wp("3.5%"),
     fontWeight: "bold",
     textAlign: "center",
     color: "black",
   },
   or: {
-    fontSize: wp('4%'),
+    fontSize: wp("4%"),
     color: "#4a5568",
     fontWeight: "bold",
     textAlign: "center",
-    paddingTop: hp('2%'),
-    paddingBottom: hp('2%'),
+    paddingTop: hp("2%"),
+    paddingBottom: hp("2%"),
   },
   bottomCont: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
-    gap: wp('10%'),
+    gap: wp("10%"),
   },
   bottomInnerCont: {
-    padding: wp('2%'),
+    padding: wp("2%"),
     backgroundColor: "#F3F4F6",
-    borderRadius: wp('4%'),
+    borderRadius: wp("4%"),
   },
   img: {
-    width: wp('8%'),
-    height: wp('8%'),
+    width: wp("8%"),
+    height: wp("8%"),
   },
   lastCont: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: hp('2%'),
+    marginTop: hp("2%"),
   },
   textBlock: {
     color: "#718096",
@@ -411,19 +399,19 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "red",
-    marginLeft: wp('4%'),
+    marginLeft: wp("4%"),
   },
   overlay: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   loginIMG: {
-    width: wp('65%'),
-    height: wp('65%'),
+    width: wp("65%"),
+    height: wp("65%"),
   },
 });
