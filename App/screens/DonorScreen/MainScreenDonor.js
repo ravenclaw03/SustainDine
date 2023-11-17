@@ -5,14 +5,16 @@ import NewScreenDonor from "./NewScreenDonor";
 import TrackScreenDonor from "./TrackScreenDonor";
 import IconButton from "../../UI/IconButton";
 import { Ionicons } from "@expo/vector-icons";
+import { useRoute } from "@react-navigation/native";
 import AccountScreenDonor from "./AccountScreenDonor";
 
 
 const Tab = createBottomTabNavigator();
 
-export default function MainScreenDonor({ route }) {
-  const { name } = route.params;
-
+export default function MainScreenDonor({ name }) {
+  // const route = useRoute();
+  // const name = route.params?.passedData || 'Default Value';
+  // console.log(name)
   return (
     <Tab.Navigator
       screenOptions={{

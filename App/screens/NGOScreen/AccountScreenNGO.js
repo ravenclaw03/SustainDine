@@ -1,9 +1,33 @@
 import React from "react";
+import { Alert } from "react-native";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons"; 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { useNavigation } from "@react-navigation/native";
 
 export default function AccountScreenNGO() {
+  const navigation = useNavigation();
+
+  const handleLogout = () => {
+    Alert.alert(
+      "Logout",
+      "Are you sure you want to logout?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Logout",
+          onPress: () => {
+            navigation.navigate("Welcome");
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -23,7 +47,7 @@ export default function AccountScreenNGO() {
         <TouchableOpacity style={styles.iconButton}>
           <AntDesign name="edit" size={24} color="#333" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.iconButton}>
+        <TouchableOpacity style={styles.iconButton} onPress={handleLogout}>
           <AntDesign name="logout" size={24} color="#333" />
         </TouchableOpacity>
       </View>

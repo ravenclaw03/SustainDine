@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,7 +9,6 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 import { themeColors } from "../theme";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -18,6 +18,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { showMessage } from "react-native-flash-message";
 import axios from "axios";
+import * as Location from 'expo-location';
 
 
 const data = [
@@ -48,6 +49,29 @@ export default function SignUpScreen() {
   const [MobileNoError, setMobileNoError] = useState("");
   const [userTypeError, setUserTypeError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [locationPermission, setLocationPermission] = useState(null);
+
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const getLocationPermission = async () => {
+
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      setLocationPermission(status);
+      
+      if (status !== 'granted') {
+        navigation.navigate('Welcome');
+        Alert.alert('Location Permission Denied', 'Please enable location services to use this app.');
+      } else {
+        const userLocation = await Location.getCurrentPositionAsync({});
+        console.log('User location:', userLocation);
+      }
+    };
+
+    getLocationPermission();
+  }, [navigation]);
 
 
   const validateFullName = () => {
@@ -189,7 +213,6 @@ export default function SignUpScreen() {
     // }
   };
 
-  const navigation = useNavigation();
   return (
     <ScrollView>
     <View style={styles.outermostCont}>
@@ -235,15 +258,27 @@ export default function SignUpScreen() {
           <Text style={styles.errorText}>{emailError}</Text>
 
           <Text style={styles.attributeName}>Password</Text>
-          <TextInput
-            style={styles.inputBox}
-            secureTextEntry
-            placeholder="Enter Password"
-            onChangeText={(text) => {
-              setPassword(text);
-              setPasswordError("");
-            }}
-          />
+            <View style={styles.passwordInputContainer}>
+              <TextInput
+                style={styles.inputBox2}
+                secureTextEntry={!showPassword}
+                placeholder="Enter Password"
+                onChangeText={(text) => {
+                  setPassword(text);
+                  setPasswordError("");
+                }}
+              />
+              <TouchableOpacity
+                style={styles.eyeIcon}
+                onPress={() => setShowPassword(!showPassword)}
+              >
+                <Ionicons
+                  name={showPassword ? "eye-off" : "eye"}
+                  size={24}
+                  color="black"
+                />
+              </TouchableOpacity>
+            </View>
           <Text style={styles.errorText}>{passwordError}</Text>
 
           <Text style={styles.attributeName}>Mobile No.</Text>
@@ -365,6 +400,24 @@ const styles = StyleSheet.create({
     backgroundColor: "#F3F4F6",
     color: "#4A5568",
     borderRadius: wp('4%'),
+  },
+  inputBox2: {
+    padding: wp("3.25%"),
+    backgroundColor: "#F3F4F6",
+    color: "#4A5568",
+    borderRadius: wp("3%"),
+    marginBottom: hp("1%"),
+    width: wp("75%"),
+  },
+  passwordInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderColor: "#F3F4F6",
+    borderRadius: wp("3%"),
+  },
+  eyeIcon: {
+    position: "absolute",
+    right: wp("3%"),
   },
   attributeName: {
     color: "black",

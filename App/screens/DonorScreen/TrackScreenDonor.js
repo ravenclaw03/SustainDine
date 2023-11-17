@@ -1,6 +1,5 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
-import IconButton from "../../UI/IconButton";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 export default function TrackScreenDonor() {
