@@ -5,6 +5,7 @@ import ngoRoutes from "./routes/ngoRoutes.js";
 import deliveryPersonRoutes from "./routes/deliveryPersonRoutes.js";
 import mongoAuthRoutes from "./routes/mongoAuthRoutes.js"
 import googleAuthRoutes from "./routes/googleAuthRoutes.js"
+import foodReqRoutes from "./routes/foodReqRoutes.js"
 import cors from "cors";
 import { PORT } from "./config.js";
 import ExpressError from "./utils/ExpressError.js";
@@ -67,6 +68,7 @@ app.use("/auth",googleAuthRoutes);
 app.use("/user", userRoutes);
 app.use("/ngo", ngoRoutes);
 app.use("/deliveryPerson", deliveryPersonRoutes);
+app.use("/foodReq",foodReqRoutes)
 
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page Not found", 404));
