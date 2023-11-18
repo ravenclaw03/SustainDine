@@ -25,7 +25,7 @@ export default function AppNavigation() {
 
         <Stack.Screen name="Donor" options={{headerShown: false}} component={MainScreenDonor} />    
         <Stack.Screen name="NGO" options={{headerShown: false}} component={MainScreenNGO} /> 
-      <Stack.Screen name="DP" options={{headerShown: false}} component={MainScreenDP} />   
+        <Stack.Screen name="DP" options={{headerShown: false}} component={MainScreenDP} />   
       </Stack.Navigator>
     </NavigationContainer>
   )

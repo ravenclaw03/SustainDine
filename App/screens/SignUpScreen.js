@@ -21,6 +21,7 @@ import axios from "axios";
 import * as Location from 'expo-location';
 
 
+
 const data = [
   {
     label: "Donor",
@@ -50,7 +51,7 @@ export default function SignUpScreen() {
   const [userTypeError, setUserTypeError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
+  const [userLocation, setUserLocation] = useState(null);
   const [locationPermission, setLocationPermission] = useState(null);
 
   const navigation = useNavigation();
@@ -144,8 +145,11 @@ export default function SignUpScreen() {
     if (isValid) {
       try {
          setIsLoading(true);
-         const response = await axios.post("https://minor-project-wss9.vercel.app/register",{email,password,mobileno,fullName});
-  
+         const location = await Location.getCurrentPositionAsync({});
+         const { latitude, longitude } = location.coords;
+         setUserLocation({ latitude, longitude });
+         console.log(latitude,longitude)
+         const response = await axios.post("https://minor-project-wss9.vercel.app/register",{email,password,mobileno,fullName,latitude,longitude,value});
           // Based on the selected user type, navigate to different screens
           setTimeout(() => {
             if (response.data.fullName) {
@@ -184,33 +188,6 @@ export default function SignUpScreen() {
     }
 
 
-
-    // if (isValid) {
-    //   setIsLoading(true);
-
-    //   // Simulating an asynchronous login process
-    //   setTimeout(() => {
-    //     setIsLoading(false);
-
-    //     showMessage({
-    //       message: 'Login Successful',
-    //       type: 'success',
-    //     });
-
-    //     // Navigating to the respective screens after a delay
-    //     setTimeout(() => {
-    //       if (value === '1') {
-    //         navigation.navigate('Donor');
-    //       } else if (value === '2') {
-    //         navigation.navigate('NGO');
-    //       } else if (value === '3') {
-    //         navigation.navigate('DP');
-    //       }
-    //     }, 100); // Adjust the delay time as needed
-    //   }, 6000); // Simulating a login process, adjust time as needed
-    // } else {
-    //   Alert.alert('Error', 'Please fill in all the fields correctly.');
-    // }
   };
 
   return (

@@ -46,7 +46,7 @@ export default function LoginScreen() {
   const [userTypeError, setUserTypeError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const bhai = "";
+
 
   const validateEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -105,15 +105,13 @@ export default function LoginScreen() {
           { email, password }
         );
         console.log(response.data);
-        const bhai = response.data.fullName;
-        console.log(bhai);
 
         setTimeout(() => {
-          Alert.alert("Success", `Welcome ${bhai}`);
+          Alert.alert("Success", `Welcome ${response.data.fullName}`);
           setIsLoading(false);
           setTimeout(() => {
             if (value === "1") {
-              navigation.navigate("Donor", { passedData: bhai });
+              navigation.navigate("Donor", { passedData: response.data.fullName });
             } else if (value === "2") {
               navigation.navigate("NGO");
             } else if (value === "3") {
