@@ -1,9 +1,5 @@
 import mongoose from "mongoose";
 
-const LocationSchema = new mongoose.Schema({
-  latitude: String,
-  longitude: String,
-});
 const FoodRequestSchema = new mongoose.Schema({
   type: String,
   numberOfPlates: Number,
@@ -15,7 +11,7 @@ const FoodRequestSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  location: [LocationSchema],
+  location: [Number],
 //   author: {
 //     type: mongoose.Schema.Types.ObjectId,
 //     ref: "User",
