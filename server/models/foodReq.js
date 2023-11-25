@@ -11,7 +11,8 @@ const FoodRequestSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  location: [Number],
+  latitude:Number,
+  longitude:Number,
 //   author: {
 //     type: mongoose.Schema.Types.ObjectId,
 //     ref: "User",

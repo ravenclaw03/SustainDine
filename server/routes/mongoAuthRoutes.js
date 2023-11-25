@@ -8,8 +8,8 @@ router.post(
   "/register",
   catchAsync(async (req, res) => {
     try {
-      const { fullName, email, password, contact } = req.body;
-      const user = new User({ fullName, email, contact });
+      const { fullName, email, password, contact ,type,latitude,longitude} = req.body;
+      const user = new User({ fullName, email, contact ,type,latitude,longitude });
       const newUser = await User.register(user, password);
       req.login(newUser, (err) => {
         if (err) return next(err);

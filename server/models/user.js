@@ -7,7 +7,8 @@ const UserSchema = new mongoose.Schema({
   contact: String,
   email: String,
   type: Number,
-  location: [Number],
+  latitude:Number,
+  longitude:Number
 });
 
 UserSchema.plugin(passportLocalMongoose, {
