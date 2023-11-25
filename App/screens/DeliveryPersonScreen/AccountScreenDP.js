@@ -30,17 +30,16 @@ export default function AccountScreenDP() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.greeting}>Hello,</Text>
-      </View>
-      <View style={styles.profileContainer}>
-        <View style={styles.profileInfo}>
-          <Text style={styles.label}>Name:</Text>
-          <Text style={styles.value}>ABC</Text>
-        </View>
-        <View style={styles.profileInfo}>
-          <Text style={styles.label}>Email:</Text>
-          <Text style={styles.value}>xyz@mail.com</Text>
+      <View style={styles.cardContainer}>
+        <View style={styles.cardContent}>
+          <View style={styles.profileInfo}>
+            <Text style={styles.label}>Name:</Text>
+            <Text style={styles.value}>ABC</Text>
+          </View>
+          <View style={styles.profileInfo}>
+            <Text style={styles.label}>Email:</Text>
+            <Text style={styles.value}>xyz@mail.com</Text>
+          </View>
         </View>
       </View>
       <View style={styles.iconContainer}>
@@ -57,41 +56,42 @@ export default function AccountScreenDP() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    marginTop: hp("8%"),
     alignItems: "center", 
     justifyContent: "center",
     backgroundColor: "#F5F5F5", 
   },
-  header: {
-    position: "absolute",
-    top: hp('1.25%'), 
-    left: wp('2.5%'), 
-  },
-  greeting: {
-    fontSize: wp('5%'),
-    fontWeight: "bold",
-    color: "#333",
-  },
-  profileContainer: {
-    flexDirection: "column",
-    alignItems: "center",
+  cardContainer: {
+    width: wp('90%'),
+    height: hp("25%"),
+    backgroundColor: "#fff",
+    borderRadius: wp('5%'),
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
     marginBottom: hp('6%'),
+    padding: wp('5%'),
+  },
+  cardContent: {
+    flexDirection: "column",
+    alignItems: "flex-start",
   },
   profileInfo: {
-    marginLeft: wp('2.5%'),
     flexDirection: "row",
+    marginTop: hp("3%"),
+    marginBottom: hp('2%'),
   },
   label: {
-    fontSize: wp('6%'),
+    fontSize: wp('5%'),
     color: "#666",
-    marginBottom: hp('1.25%'),
+    marginRight: wp('2%'),
   },
   value: {
-    fontSize: wp('6.25%'), 
+    fontSize: wp('5%'), 
     fontWeight: "bold",
     color: "#333",
-    marginBottom: hp('2%'), 
-    marginLeft: wp('5%'), 
   },
   iconContainer: {
     flexDirection: "row",
