@@ -27,14 +27,14 @@ router.get("/login", (req, res) => {
 });
 router.post(
   "/login",
-  passport.authenticate("local", { failureRedirect: ""}),isLoggedIn,
+  passport.authenticate("local", { failureRedirect: ""}),
   async(req, res) => {
-    console.log(req.user)
     const user = await User.findOne({email:req.user.email});
     return res.json(user);
   }
 );
 router.get("/logout", (req, res, next) => {
+  console.log(req.user)
   req.logout(function (err) {
     if (err) {
       return next(err);
