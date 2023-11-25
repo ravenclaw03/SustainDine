@@ -9,7 +9,8 @@ const DeliveryPersonSchema = new Schema({
   firstName: String,
   lastName: String,
   contact: String,
-  location: [Number],
+  latitude:Number,
+  longitude:Number,
 });
 
 export default mongoose.model("DeliveryPerson", DeliveryPersonSchema);

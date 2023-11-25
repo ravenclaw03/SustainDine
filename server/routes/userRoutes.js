@@ -2,19 +2,10 @@ import express from "express";
 const router = express.Router();
 import User from "../models/user.js";
 import catchAsync from "../utils/catchAsync.js";
-import ExpressError from "../utils/ExpressError.js";
+import { validateUser } from "../middleware.js/middleware.js";
 import passport from "passport";
 //import {userSchema} from '../Schemas.js';
 
-const validateUser = (req, res, next) => {
-  const { error } = userSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(msg, 400);
-  } else {
-    next();
-  }
-};
 //Users routers
 router.get(
   "/show",
@@ -35,8 +26,6 @@ router.post(
     await res.send("User Created Successfully");
   })
 );
-
-
 
 router.get(
   "/:id",

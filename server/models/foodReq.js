@@ -1,9 +1,12 @@
 import mongoose from "mongoose";
-
 const FoodRequestSchema = new mongoose.Schema({
   type: String,
   numberOfPlates: Number,
-  isAccepted: {
+  isNGOAccepted: {
+    type: Boolean,
+    default: false,
+  },
+  isDPAccepted: {
     type: Boolean,
     default: false,
   },
@@ -13,10 +16,10 @@ const FoodRequestSchema = new mongoose.Schema({
   },
   latitude:Number,
   longitude:Number,
-//   author: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: "User",
-//   },
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 export default mongoose.model("FoodReq", FoodRequestSchema);

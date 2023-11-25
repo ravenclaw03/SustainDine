@@ -3,6 +3,7 @@ const router = express.Router();
 import User from "../models/user.js";
 import catchAsync from "../utils/catchAsync.js";
 import passport from "passport";
+import { isLoggedIn } from "../middleware.js/middleware.js";
 //register user
 router.post(
   "/register",
@@ -26,8 +27,9 @@ router.get("/login", (req, res) => {
 });
 router.post(
   "/login",
-  passport.authenticate("local", { failureRedirect: ""}),
+  passport.authenticate("local", { failureRedirect: ""}),isLoggedIn,
   async(req, res) => {
+    console.log(req.user)
     const user = await User.findOne({email:req.user.email});
     return res.json(user);
   }
