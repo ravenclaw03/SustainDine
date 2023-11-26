@@ -24,7 +24,7 @@ export default function NewScreenDonor() {
   };
 
   const handleSubmission = async () => {
-    if (!type || !numberOfPlates || !isVegetarian) {
+    if (!type || !numberOfPlates ) {
       Alert.alert('Error', 'Please fill in all fields.');
     } else {
 

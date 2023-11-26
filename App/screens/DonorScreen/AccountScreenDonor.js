@@ -9,26 +9,25 @@ import axios from "axios";
 export default function AccountScreenDonor() {
   const navigation = useNavigation();
   const [userData, setUserData] = useState({
-    name: 'Default Name',
+    fullName: 'Default Name',
     email: 'xyz@mail.com',
-    contactNumber: '123-456-7890'
+    contact: '123-456-7890',
+    address: 'unknown'
   });
 
   const fetchUserDataFromBackend = async () => {
     try {
-      // Make a request to your backend endpoint to fetch user data
-      const response = await fetch("YOUR_BACKEND_ENDPOINT");
+      const response = await fetch("https://minor-project-wss9.vercel.app/currentUser");
       const data = await response.json();
       setUserData(data);
     } catch (error) {
-      console.log("Error fetching user data");
+      //console.log("Error fetching user data");
     }
   };
 
   const logoutHandler = async () => {
     try{
       const response = await axios.get("https://minor-project-wss9.vercel.app/logout");
-      console.log(response.data)
       navigation.navigate("Welcome");
     } catch(error)
     {
@@ -37,25 +36,7 @@ export default function AccountScreenDonor() {
     }
   }
 
-  const handleLogout = () => {
-    Alert.alert(
-      "Logout",
-      "Are you sure you want to logout?",
-      [
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
-        {
-          text: "Logout",
-          onPress: () => {logoutHandler},
-        },
-      ],
-      { cancelable: false }
-    );
-  };
 
-  // Fetch user data when the component is rendered
   fetchUserDataFromBackend();
 
   return (
@@ -64,23 +45,25 @@ export default function AccountScreenDonor() {
         <View style={styles.cardContent}>
           <View style={styles.profileInfo}>
             <Text style={styles.label}>Name:</Text>
-            <Text style={styles.value}>{userData.name}</Text>
+            <Text style={styles.value}>{userData.fullName}</Text>
           </View>
           <View style={styles.profileInfo}>
             <Text style={styles.label}>Email:</Text>
             <Text style={styles.value}>{userData.email}</Text>
           </View>
           <View style={styles.profileInfo}>
-            <Text style={styles.label}>Contact Number:</Text>
-            <Text style={styles.value}>{userData.contactNumber}</Text>
+            <Text style={styles.label}>Contact:</Text>
+            <Text style={styles.value}>{userData.contact}</Text>
+          </View>
+          <View style={styles.profileInfo}>
+            <Text style={styles.label}>Address:</Text>
+            <Text style={styles.value}>{userData.address}</Text>
           </View>
         </View>
       </View>
       <View style={styles.iconContainer}>
-        <TouchableOpacity style={styles.iconButton} >
-          <AntDesign name="edit" size={24} color="#333" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.iconButton} onPress={handleLogout}>
+        <TouchableOpacity style={styles.iconButton} onPress={logoutHandler}>
+          <Text style={styles.logoutText}>Logout</Text>
           <AntDesign name="logout" size={24} color="#333" />
         </TouchableOpacity>
       </View>
@@ -97,7 +80,7 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     width: wp('90%'),
-    height: hp("32%"),
+    height: hp("40%"),
     backgroundColor: "#fff",
     borderRadius: wp('5%'),
     elevation: 3,
@@ -135,5 +118,10 @@ const styles = StyleSheet.create({
     padding: wp('2.25%'), 
     borderRadius: wp('5%'), 
     marginHorizontal: wp('2.5%'),
+    flexDirection: "row",
+  },
+  logoutText: {
+    fontSize: hp('2%'),
+    marginRight: wp('2%'),
   },
 });

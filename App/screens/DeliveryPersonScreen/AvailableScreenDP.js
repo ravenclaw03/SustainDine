@@ -1,190 +1,164 @@
 import React, { useState } from "react";
-import { Text, StyleSheet, View, TouchableOpacity, ScrollView, Alert } from "react-native";
-import IconButton from "../../UI/IconButton";
+import { Text, StyleSheet, View, TouchableOpacity, ScrollView, TextInput, Alert } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import axios from "axios";
 
 export default function AvailableScreenDP() {
-  const [foodDonations, setFoodDonations] = useState([
-    {
-      totalWeight: 10,
-      foodType: "Vegetables",
-      distance: 5,
-    },
-    {
-      totalWeight: 15,
-      foodType: "Fruits",
-      distance: 8,
-    },
-    {
-      totalWeight: 15,
-      foodType: "Fruits",
-      distance: 8,
-    },
-    {
-      totalWeight: 15,
-      foodType: "Fruits",
-      distance: 8,
-    },
-    {
-      totalWeight: 15,
-      foodType: "Fruits",
-      distance: 8,
-    },
-    // Add more initial donations if needed
-  ]);
 
-  const handleAccept = (index) => {
-    console.log("Accepted donation at index:", index);
-    const acceptedOrder = foodDonations[index];
-    setFoodDonations((prevDonations) => {
-      const updatedDonations = prevDonations.filter((_, i) => i !== index);
-      return updatedDonations;
-    });
+  const [totalOrders, setTotalOrders] = useState({
+    count: 0,
+  });
+  const [availableOrders, setAvailableOrders] = useState([]);
 
-    // Logic for what to do with the accepted order
-  };
 
-  const handleDecline = (index) => {
-    console.log("Declined donation at index:", index);
-    Alert.alert(
-      'Order Declined!',
-      'Are you sure you want to decline the order?',
-      [
-        {
-          text: 'No',
-          onPress: () => console.log('Ask again'),
-          style: 'default',
-        },
-        {
-          text: 'Yes',
-          onPress: () => {
-            setFoodDonations((prevDonations) => {
-              const updatedDonations = prevDonations.filter((_, i) => i !== index);
-              return updatedDonations;
-            });
-          },
-          style: 'cancel',
-        },
-      ],
-      { cancelable: false }
-    );
-  };
-
-  const handleRefresh = () => {
-    // Simulated API call to check for new requests
-    const newRequests = [
-      {
-        totalWeight: 20,
-        foodType: "Bakery",
-        distance: 3,
-      },
-      // Add more new requests if available
-    ];
-
-    if (newRequests.length > 0) {
-      setFoodDonations(newRequests);
-    } else {
-      // Show a floating message or alert that no new requests are available
-      Alert.alert('No New Requests', 'No new requests available at the moment.');
+  const refreshOrders = async () => {
+    try {
+      const response = await fetch("https://minor-project-wss9.vercel.app/foodReq/showactvDP");
+      const data = await response.json();
+      setAvailableOrders(data.data);
+      setTotalOrders(data.count);
+    } catch (error) {
+      console.log("Error fetching orders:", error.message);
+      Alert.alert("Error", "Failed to fetch orders. Please try again later.");
     }
   };
 
+  refreshOrders();
+
+
+  const acceptOrder = async (id) => {
+    console.log(id);
+    try{
+      const response = await axios.put(`https://minor-project-wss9.vercel.app/foodReq/closeDP/${id}`);
+      console.log(response.data);
+    }catch(error){
+      console.log(error.message);
+    }
+    const updatedOrders = availableOrders.filter((_, i) => i !== id);
+    setAvailableOrders(updatedOrders);
+  };
+
   return (
-    <ScrollView contentContainerStyle={styles.outerCont}>
-      {foodDonations.length > 0 ? (
-        foodDonations.map((donation, index) => (
-          <View style={styles.cardContainer} key={index}>
-            <Text style={styles.label}>Total Food Weight: {donation.totalWeight} kgs</Text>
-            <Text style={styles.label}>Food Type: {donation.foodType}</Text>
-            <Text style={styles.label}>Distance: {donation.distance} km away</Text>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity onPress={() => handleAccept(index)} style={styles.acceptButton}>
-                <Text style={styles.buttonText}>Accept</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleDecline(index)} style={styles.declineButton}>
-                <Text style={styles.buttonText}>Decline</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        ))
-      ) : (
-        <View style={styles.noRequestContainer}>
-          <View style={styles.cont}>
-            <Text style={styles.text}>No new requests available! </Text>
-          </View>
-          <TouchableOpacity style={styles.refreshButton} onPress={handleRefresh}>
-            <Text style={styles.buttonText}>Refresh</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-    </ScrollView>
+    <View style={styles.outerCont}>
+          <ScrollView style={styles.scrollView}>
+              {availableOrders.map((item, index) => (
+              <View style={styles.orderCard} key={index}>
+                <View style={styles.orderInfo}>
+                  <Text style={styles.text}>Food Type: {item.type}</Text>
+                  <Text style={styles.text}>No. of Plates: {item.numberOfPlates}</Text>
+                  <Text style={styles.text}>Is Veg: {item.isVegetarian ? 'Yes' : 'No'}</Text>
+                  </View>
+                <View style={styles.buttonsContainer}>
+                  <TouchableOpacity
+                    style={styles.acceptButton}
+                    onPress={() => acceptOrder(item._id)}
+                  >
+                    <Text style={styles.acceptText}>Accept</Text>
+                  </TouchableOpacity>
+                </View>
+            </View>  
+              ))}
+              
+          </ScrollView>
+    </View>
   );
 }
 
+
 const styles = StyleSheet.create({
   outerCont: {
-    alignItems: "center",
-    paddingVertical: hp('1.5%'),
-  },
-  cardContainer: {
-    width: wp('90%'), 
-    height: hp('18%'),
-    margin: wp('4%'),
-    padding: wp('3%'),
-    borderRadius: wp('3.75%'),
-    backgroundColor: "#e3e3e3",
-    justifyContent: "space-between",
-  },
-  label: {
-    fontSize: wp('3.25%'),
-    marginBottom: hp('1%'),
-  },
-  noRequestContainer: {
     flex: 1,
+    flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
   },
   cont: {
-    height: hp('6%'), 
+    height: hp('5%'),
     width: wp('60%'),
-    marginTop: hp('35%'), 
     borderRadius: wp('5%'),
-    alignContent: "center",
-    flexDirection: 'row',
-    alignItems: "center",
-    backgroundColor: "#0096FF",
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#50C878',
+    margin: wp('4%'),
+  },
+  orderInfo: {
+    flex: 1,
   },
   text: {
-    marginLeft: wp('10%'),
+    fontSize: wp('3.75%'),
+    marginLeft: wp('2%'),
+    marginBottom: hp('0.75%'),
+    marginTop: hp('0.75%'),
+  },
+  acceptText: {
     fontSize: wp('3.75%'),
   },
   refreshButton: {
-    backgroundColor: "#0096FF",
-    padding: hp('1.25%'),
-    marginTop: hp('3%'), 
+    height: hp('5%'),
+    width: wp('25%'),
+    borderRadius: wp('5%'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#50C878',
+    margin: wp('4%'),
+    marginLeft: wp('20%'),
+  },
+  refreshText: {
+    fontSize: wp('3.75%'),
+  },
+  scrollView: {
+    width: wp('100%'),
+    marginTop: hp("2%"),
+    marginLeft: wp('8%'),
+  },
+  orderCard: {
+    backgroundColor: "white",
+    padding: wp('2%'),
+    margin: wp('2.5%'),
+    marginLeft: wp('4%'),
+    width: wp('85%'),
     borderRadius: wp('2%'),
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
-  },
-  buttonContainer: {
+    fontSize: wp("5%"),
     flexDirection: "row",
-    justifyContent: "space-around",
-    marginTop: hp('2%'),
   },
   acceptButton: {
-    backgroundColor: "green",
-    padding: hp('1%'),
-    width: wp('22.5%'), 
-    alignItems: "center",
-    borderRadius: hp('2%'),
+    backgroundColor: "#32de84",
+    padding: wp('2.5%'),
+    marginTop: hp('3%'),
+    borderRadius: wp('5%'),
+    marginRight: wp('2%')
   },
-  declineButton: {
-    backgroundColor: "red",
-    padding: hp('1%'),
-    width: wp('22.5%'), 
-    alignItems: "center",
-    borderRadius: hp('2%'),
+
+  requestContainer: {
+    backgroundColor: "white",
+    padding: wp('2%'),
+    margin: wp('2%'),
+    width: wp('85%'),
+    borderRadius: wp('2%'),
+  },
+  label: {
+    fontSize: wp('3%'),
+    marginVertical: hp('0.8%'),
+  },
+  input: {
+    height: hp('5%'),
+    borderColor: "black",
+    borderWidth: 1,
+    marginBottom: hp('1%'),
+    paddingLeft: wp('2.6%'),
+    borderRadius: wp('1%'),
+  },
+
+  requestContainer: {
+    backgroundColor: "white",
+    padding: wp('2%'),
+    margin: wp('2%'),
+    width: wp('85%'),
+    borderRadius: wp('2%'),
+  },
+  requestContainer: {
+    backgroundColor: "white",
+    width: wp('80%'),
+    borderRadius: wp('2%'),
   },
 });
