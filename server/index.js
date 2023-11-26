@@ -58,7 +58,7 @@ app.use((req,res,next)=>{
   next();
 })
 //home route
-app.get("/home", (req, res) => {
+app.get("/", (req, res) => {
   res.send("Hello Bhai, welcome to the home page");
 });
 

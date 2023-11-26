@@ -12,7 +12,7 @@ const detailsNGO = async (req, res) => {
   return res.json(ngo);
 };
 const updateNGO = async (req, res) => {
-  const result = await Ngo.findByIdAndUpdate(req.params.id, req.body);
+  const result = await User.findByIdAndUpdate(req.params.id, req.body);
   if (result) {
     res.send("Updated successfully");
   } else {
