@@ -48,7 +48,10 @@ const closedByNGO = async (req, res) => {
   return res.status(200).json(foodreq);
 };
 const getDetails = async (req, res) => {
-  const foodReq = await FoodReq.findById(req.params.id).populate("author").populate("ngo").populate("deliveryPerson");
+  const foodReq = await FoodReq.findById(req.params.id)
+    .populate("author")
+    .populate("ngo")
+    .populate("deliveryPerson");
   return res.status(200).json(foodReq);
 };
 const updateReq = async (req, res) => {
@@ -68,7 +71,26 @@ const deleteReq = async (req, res) => {
     return res.status(404).json("Request not found");
   }
 };
-
+const userActive = async (req, res) => {
+  const FoodReqs = await FoodReq.find({
+    isDPAccepted: false,
+    author: req.user._id,
+  });
+  return res.status(200).json({
+    count: FoodReqs.length,
+    data: FoodReqs,
+  });
+};
+const userInProgress = async (req, res) => {
+  const FoodReqs = await FoodReq.find({
+    isDPAccepted: true,
+    author: req.user._id,
+  });
+  return res.status(200).json({
+    count: FoodReqs.length,
+    data: FoodReqs,
+  });
+};
 export {
   activeReqs,
   activeDpReqs,
@@ -79,4 +101,6 @@ export {
   getDetails,
   updateReq,
   deleteReq,
+  userActive,
+  userInProgress,
 };
