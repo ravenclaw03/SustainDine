@@ -21,29 +21,13 @@ import {
 } from "react-native-responsive-screen";
 import axios from "axios";
 
-const data = [
-  {
-    label: "Donor",
-    value: "1",
-  },
-  {
-    label: "NGO",
-    value: "2",
-  },
-  {
-    label: "Delivery Person",
-    value: "3",
-  },
-];
 
 export default function LoginScreen() {
-  const [value, setValue] = useState(null);
-  const [isFocus, setIsFocus] = useState(false);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [userTypeError, setUserTypeError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -65,17 +49,6 @@ export default function LoginScreen() {
     return true;
   };
 
-  const renderLabel = () => {
-    if (value || isFocus) {
-      return (
-        <Text style={[styles.label, isFocus && { color: "orange" }]}>
-          User Type:
-        </Text>
-      );
-    }
-    return null;
-  };
-
   const googleLogin = async () => {
     console.log("Hello google");
   };
@@ -90,12 +63,6 @@ export default function LoginScreen() {
     if (!validateEmail() || !validatePassword()) {
       isValid = false;
     }
-    if (value == null) {
-      setUserTypeError("Please select a user type");
-      isValid = false;
-    } else {
-      setUserTypeError("");
-    }
 
     if (isValid) {
       try {
@@ -104,17 +71,16 @@ export default function LoginScreen() {
           "https://minor-project-wss9.vercel.app/login",
           { email, password }
         );
-        console.log(response.data);
 
         setTimeout(() => {
           Alert.alert("Success", `Welcome ${response.data.fullName}`);
           setIsLoading(false);
           setTimeout(() => {
-            if (value === "1") {
+            if (response.data.type === 1) {
               navigation.navigate("Donor", { passedData: response.data.fullName });
-            } else if (value === "2") {
+            } else if (response.data.type === 2) {
               navigation.navigate("NGO");
-            } else if (value === "3") {
+            } else if (response.data.type === 3) {
               navigation.navigate("DP");
             }
           }, 100); // Adjust the delay time as needed
@@ -131,50 +97,6 @@ export default function LoginScreen() {
       Alert.alert("Error", "Please fill in all the fields correctly.");
     }
 
-    // if (isValid) {
-    //   try {
-
-    //     // const token = await login(email, password);
-    //     // const response = await axios.post('http://localhost:4000/login', {
-    //     //   email: email,
-    //     //   password: password,
-    //     // });
-
-    //     const response = await axios.post('http://localhost:4000/login', {
-    //       email,
-    //       password,
-    //     });
-
-    //     const token = response.data.token;
-
-    //     setIsLoading(true);
-
-    //     // Simulating an asynchronous login process
-    //     setTimeout(() => {
-    //       setIsLoading(false);
-
-    //       showMessage({
-    //         message: 'Login Successful',
-    //         type: 'success',
-    //       });
-
-    //       // Navigating to the respective screens after a delay
-    //       setTimeout(() => {
-    //         if (value === '1') {
-    //           navigation.navigate('Donor');
-    //         } else if (value === '2') {
-    //           navigation.navigate('NGO');
-    //         } else if (value === '3') {
-    //           navigation.navigate('DP');
-    //         }
-    //       }, 100); // Adjust the delay time as needed
-    //     }, 6000); // Simulating a login process, adjust time as needed
-    //   } catch (error) {
-    //     Alert.alert('Error', 'Authentication failed. Please try again.');
-    //   }
-    // } else {
-    //   Alert.alert('Error', 'Please fill in all the fields correctly.');
-    // }
   };
 
   const navigation = useNavigation();
@@ -235,40 +157,6 @@ export default function LoginScreen() {
             <Text style={styles.errorText}>{passwordError}</Text>
             <TouchableOpacity style={styles.forgotCont} onPress={forgot}>
               <Text style={styles.forgotText}>Forgot Password?</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity>
-              <View style={styles.container}>
-                {renderLabel()}
-                <Dropdown
-                  style={[
-                    styles.dropdown,
-                    isFocus && { borderColor: "orange" },
-                  ]}
-                  placeholderStyle={styles.placeholderStyle}
-                  selectedTextStyle={styles.selectedTextStyle}
-                  inputSearchStyle={styles.inputSearchStyle}
-                  iconStyle={styles.iconStyle}
-                  data={data}
-                  search
-                  maxHeight={300}
-                  labelField="label"
-                  valueField="value"
-                  placeholder={!isFocus ? "    Select login type" : "..."}
-                  searchPlaceholder="Search..."
-                  value={value}
-                  onFocus={() => setIsFocus(true)}
-                  onBlur={() => setIsFocus(false)}
-                  onChange={(item) => {
-                    setValue(item.value);
-                    setIsFocus(false);
-                  }}
-                  renderLeftIcon={() => (
-                    <Ionicons name="person" size={20} color="black" />
-                  )}
-                />
-              </View>
-              <Text style={styles.errorText}>{userTypeError}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>

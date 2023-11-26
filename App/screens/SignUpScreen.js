@@ -25,15 +25,15 @@ import * as Location from 'expo-location';
 const data = [
   {
     label: "Donor",
-    value: "1",
+    type: "1",
   },
   {
     label: "NGO",
-    value: "2",
+    type: "2",
   },
   {
     label: "Delivery Person",
-    value: "3",
+    type: "3",
   },
 ];
 
@@ -41,13 +41,15 @@ export default function SignUpScreen() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [mobileno, setmobileno] = useState("");
-  const [value, setValue] = useState(null);
+  const [contact, setContact] = useState("");
+  const [address, setAddress] = useState(null);
+  const [type, setType] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
   const [fullNameError, setFullNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [MobileNoError, setMobileNoError] = useState("");
+  const [contactError, setContactError] = useState("");
+  const [addressError, setAddressError] = useState("");
   const [userTypeError, setUserTypeError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -83,6 +85,7 @@ export default function SignUpScreen() {
     return true;
   };
 
+  
   const validateEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -91,7 +94,7 @@ export default function SignUpScreen() {
     }
     return true;
   };
-
+  
   const validatePassword = () => {
     if (password.length < 6) {
       setPasswordError("Password must be at least 6 characters");
@@ -99,18 +102,25 @@ export default function SignUpScreen() {
     }
     return true;
   };
-
-  const validateMobileNo = () => {
-    if (mobileno.length != 10) {
-      setMobileNoError("Mobile No. must be 10 digits");
+  
+  const validateContact = () => {
+    if (contact.length != 10) {
+      setContactError("Mobile No. must be 10 digits");
+      return false;
+    }
+    return true;
+  };
+  
+  const validateAddress = () => {
+    if (address.trim() === "") {
+      setAddressError("Address is required");
       return false;
     }
     return true;
   };
 
-
   const renderLabel = () => {
-    if (value || isFocus) {
+    if (type || isFocus) {
       return (
         <Text style={[styles.label, isFocus && { color: "orange" }]}>
           User Type:
@@ -130,11 +140,12 @@ export default function SignUpScreen() {
       !validateFullName() ||
       !validateEmail() ||
       !validatePassword() ||
-      !validateMobileNo()
+      !validateContact() ||
+      !validateAddress()
     ) {
       isValid = false;
     }
-    if (value === null) {
+    if (type === null) {
       setUserTypeError("Please select a user type.");
       isValid = false;
     } else {
@@ -149,8 +160,8 @@ export default function SignUpScreen() {
          const { latitude, longitude } = location.coords;
          setUserLocation({ latitude, longitude });
          console.log(latitude,longitude)
-         const response = await axios.post("https://minor-project-wss9.vercel.app/register",{email,password,mobileno,fullName,latitude,longitude,value});
-          // Based on the selected user type, navigate to different screens
+         const response = await axios.post("https://minor-project-wss9.vercel.app/register",{email,password,contact,fullName,latitude,longitude,type,address});
+          console.log(response.data)
           setTimeout(() => {
             if (response.data.fullName) {
               Alert.alert("You're Registered!", `Welcome ${response.data.fullName}`);
@@ -158,13 +169,12 @@ export default function SignUpScreen() {
               throw new Error("Registration failed: Email Already exists");
             }
             setIsLoading(false);
-            // Navigating to the respective screens after a delay
             setTimeout(() => {
-              if (value === '1') {
+              if (type === '1') {
                 navigation.navigate('Donor');
-              } else if (value === '2') {
+              } else if (type === '2') {
                 navigation.navigate('NGO');
-              } else if (value === '3') {
+              } else if (type === '3') {
                 navigation.navigate('DP');
               }
             }, 100); // Adjust the delay time as needed
@@ -258,17 +268,29 @@ export default function SignUpScreen() {
             </View>
           <Text style={styles.errorText}>{passwordError}</Text>
 
-          <Text style={styles.attributeName}>Mobile No.</Text>
+          <Text style={styles.attributeName}>Contact</Text>
 
           <TextInput
             style={styles.inputBox}
             placeholder="Enter Mobile No."
             onChangeText={(text) => {
-              setmobileno(text);
-              setMobileNoError("");
+              setContact(text);
+              setContactError("");
             }}
           />
-          <Text style={styles.errorText}>{MobileNoError}</Text>
+          <Text style={styles.errorText}>{contactError}</Text>
+
+          <Text style={styles.attributeName}>Address</Text>
+
+          <TextInput
+            style={styles.inputBox}
+            placeholder="Enter Address"
+            onChangeText={(text) => {
+              setAddress(text);
+              setAddressError("");
+            }}
+          />
+          <Text style={styles.errorText}>{addressError}</Text>
 
           <TouchableOpacity>
             <View style={styles.container}>
@@ -283,14 +305,14 @@ export default function SignUpScreen() {
                 search
                 maxHeight={300}
                 labelField="label"
-                valueField="value"
+                typeField="type"
                 placeholder={!isFocus ? "    Select login type" : "..."}
                 searchPlaceholder="Search..."
-                value={value}
+                type={type}
                 onFocus={() => setIsFocus(true)}
                 onBlur={() => setIsFocus(false)}
                 onChange={(item) => {
-                  setValue(item.value);
+                  setType(item.type);
                   setIsFocus(false);
                 }}
                 renderLeftIcon={() => (
@@ -346,7 +368,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: themeColors.bg,
     marginTop: hp('1%'),
-    height: 1050,
+    height: 1150,
   },
   backArrowView: {
     flexDirection: "row",

@@ -1,48 +1,71 @@
 import React, { useState } from "react";
-import { Text, StyleSheet, View, TextInput, TouchableOpacity, Alert, ScrollView } from "react-native";
-import IconButton from "../../UI/IconButton";
+import { Text, StyleSheet, View, TextInput, TouchableOpacity, Alert, ScrollView, Switch } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import axios from 'axios';
 
 export default function NewScreenDonor() {
   const [showInputFields, setShowInputFields] = useState(false);
-  const [foodType, setFoodType] = useState('');
-  const [totalFoodWeight, setTotalFoodWeight] = useState('');
+  const [type, setType] = useState('');
+  const [numberOfPlates, setnumberOfPlates] = useState('');
   const [requestGenerated, setRequestGenerated] = useState(false);
   const [requests, setRequests] = useState([]);
+  const [isVegetarian, setIsVegetarian] = useState(false);
 
   const handleRequestClick = () => {
     setShowInputFields((prev) => !prev);
   };
 
-  const handleFoodTypeChange = (text) => {
-    setFoodType(text);
+  const handleTypeChange = (text) => {
+    setType(text);
   };
 
-  const handleTotalWeightChange = (text) => {
-    setTotalFoodWeight(text);
+  const handlenumberOfPlates = (text) => {
+    setnumberOfPlates(text);
   };
 
-  const handleSubmission = () => {
-    if (!foodType || !totalFoodWeight) {
+  const handleSubmission = async () => {
+    if (!type || !numberOfPlates || !isVegetarian) {
       Alert.alert('Error', 'Please fill in all fields.');
     } else {
-      setRequests((prevRequests) => [
-        ...prevRequests,
-        { foodType, totalFoodWeight }
-      ]);
-      setFoodType('');
-      setTotalFoodWeight('');
-      setShowInputFields(false);
-      setRequestGenerated(true);
-      setTimeout(() => {
+
+      try{
+        console.log(type)
+        console.log(numberOfPlates)
+        console.log(isVegetarian)
+        const response = await axios.post("https://minor-project-wss9.vercel.app/foodReq/new",{type, numberOfPlates, isVegetarian});
+        console.log(response.data);
+        setRequests((prevRequests) => [
+          ...prevRequests,
+          { type, numberOfPlates, isVegetarian }
+        ]);
+        setRequestGenerated(true);
+        setTimeout(() => {
         setRequestGenerated(false);
       }, 4000);
+      }catch(error){
+        console.log("error in handleSubmission");
+        console.log(error);
+        Alert.alert("Error!", "Request cannot be initiated");
+        setShowInputFields(false);
+        setType('');
+        setnumberOfPlates('');
+        setIsVegetarian(false); 
+      }
+      
     }
   };
 
-  const deleteRequest = (index) => {
-    const updatedRequests = requests.filter((_, i) => i !== index);
-    setRequests(updatedRequests);
+  const deleteRequest = async (index) => {
+    try{
+      const response = await axios.post("https://minor-project-wss9.vercel.app/new",{});
+      console.log(response.data);
+      const updatedRequests = requests.filter((_, i) => i !== index);
+      setRequests(updatedRequests);
+    }catch(error){
+      console.log("error in deleteRequest");
+      console.log(error);
+      Alert.alert("Error!", "Request cannot be initiated");
+    }
   };
 
   return (
@@ -60,17 +83,27 @@ export default function NewScreenDonor() {
           <TextInput
             style={styles.input}
             placeholder="Enter Food Type"
-            onChangeText={handleFoodTypeChange}
-            value={foodType}
+            onChangeText={handleTypeChange}
+            value={type}
           />
-          <Text style={styles.heading}>Total Food Weight</Text>
+          <Text style={styles.heading}>Total no. of Plates</Text>
           <TextInput
             style={styles.input}
-            placeholder="Enter Total Food Weight"
-            onChangeText={handleTotalWeightChange}
-            value={totalFoodWeight}
+            placeholder="Enter Total no. of plates"
+            onChangeText={handlenumberOfPlates}
+            value={numberOfPlates}
             keyboardType="numeric"
           />
+          <View style={styles.switchContainer}>
+            <Text style={styles.heading}>Is Veg?</Text>
+            <Switch
+              trackColor={{ false: "#767577", true: "#81b0ff" }}
+              thumbColor={isVegetarian ? "#3cb043" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={() => setIsVegetarian(previousState => !previousState)}
+              value={isVegetarian}
+            />
+          </View>
           <TouchableOpacity style={styles.submitButton} onPress={handleSubmission}>
             <Text style={styles.buttonText}>Submit</Text>
           </TouchableOpacity>
@@ -98,8 +131,8 @@ export default function NewScreenDonor() {
         {requests.map((request, index) => (
           <View style={styles.requestCard} key={index}>
             <View>
-              <Text style={styles.textcont}>Food Type: {request.foodType}</Text>
-              <Text style={styles.textcont}>Total Food Weight: {request.totalFoodWeight}</Text>
+              <Text style={styles.textcont}>Food Type: {request.type}</Text>
+              <Text style={styles.textcont}>Total no. of Plates: {request.numberOfPlates}</Text>
             </View>
             <View>
               <TouchableOpacity onPress={() => deleteRequest(index)} style={styles.deleteButton}>
@@ -211,5 +244,11 @@ const styles = StyleSheet.create({
     marginTop: hp('35%'),
     color: 'gray',
     textAlign: 'center',
+  },
+  switchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: hp('1%'),
   },
 });
