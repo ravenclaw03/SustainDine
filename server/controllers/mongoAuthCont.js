@@ -41,7 +41,7 @@ const logoutUser = async (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.send("logged out");
+    return res.json("Logged Out");
   });
 };
 const currentUserDetails = async (req, res) => {
