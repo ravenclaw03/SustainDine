@@ -8,13 +8,12 @@ import {
   deleteDP,
 } from "../controllers/deliveryPersonCont.js";
 import catchAsync from "../utils/catchAsync.js";
-import { validateDeliveryPerson } from "../middleware.js/middleware.js";
-//import {DeliveryPersonSchema} from '../Schemas.js';
+import { validateFields } from "../middleware.js/middleware.js";
 //DP routers
 router.get("/show", catchAsync(allDPs));
-router.post("/new", validateDeliveryPerson, catchAsync(newDP));
+router.post("/new", validateFields, catchAsync(newDP));
 router.get("/:id", catchAsync(detailsOfDP));
-router.put("/:id", validateDeliveryPerson, catchAsync(updateDP));
+router.put("/:id", validateFields, catchAsync(updateDP));
 router.delete("/:id", catchAsync(deleteDP));
 
 export default router;

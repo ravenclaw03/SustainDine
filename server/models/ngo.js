@@ -2,13 +2,13 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const NgoSchema = new Schema({
-  name: String,
-  email: String,
-  address: String,
+  fullName: String,
   contact: String,
-  pincode: String,
-  latitude:Number,
-  longitude:Number
+  email: String,
+  type: Number,
+  latitude: Number,
+  longitude: Number,
+  address: String,
 });
 
 export default mongoose.model("Ngo", NgoSchema);

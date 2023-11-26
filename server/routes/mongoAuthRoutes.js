@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 import catchAsync from "../utils/catchAsync.js";
 import passport from "passport";
-import { validateUser } from "../middleware.js/middleware.js";
+import { validateFields } from "../middleware.js/middleware.js";
 import {
   registerUser,
   loginUser,
@@ -12,13 +12,12 @@ import {
 } from "../controllers/mongoAuthCont.js";
 
 //auth routes
-router.post("/register", validateUser,catchAsync(registerUser));
+router.post("/register", validateFields,catchAsync(registerUser));
 router.get("/login", getLogin);
 router.post(
   "/login",
   passport.authenticate("local", { failureRedirect: "/login" }),
-  catchAsync,
-  loginUser
+  catchAsync(loginUser)
 );
 router.get("/logout", catchAsync(logoutUser));
 router.get("/currentUser", currentUserDetails);

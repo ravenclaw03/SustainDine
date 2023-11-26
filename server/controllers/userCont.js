@@ -7,11 +7,6 @@ const showUsers = async (req, res) => {
     data: users,
   });
 };
-const newUser = async (req, res) => {
-  const newUser = new User(req.body);
-  await newUser.save();
-  await res.send("User Created Successfully");
-};
 const detailsUser = async (req, res) => {
   const user = await User.findById(req.params.id);
   return res.json(user);
@@ -32,4 +27,4 @@ const deleteUser = async (req, res) => {
     res.send("User not found");
   }
 };
-export { showUsers, newUser, detailsUser, updateUser, deleteUser };
+export { showUsers, detailsUser, updateUser, deleteUser };

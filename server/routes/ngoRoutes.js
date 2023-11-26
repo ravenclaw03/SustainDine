@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import catchAsync from "../utils/catchAsync.js";
-import { validateNgo } from "../middleware.js/middleware.js";
+import { validateFields } from "../middleware.js/middleware.js";
 import {
   listNGOs,
   newNGO,
@@ -11,9 +11,9 @@ import {
 } from "../controllers/ngoCont.js";
 //Ngos routers
 router.get("/show", catchAsync(listNGOs));
-router.post("/new", validateNgo, catchAsync(newNGO));
+router.post("/new", validateFields, catchAsync(newNGO));
 router.get("/:id", catchAsync(detailsNGO));
-router.put("/:id", validateNgo, catchAsync(updateNGO));
+router.put("/:id", validateFields, catchAsync(updateNGO));
 router.delete("/:id", catchAsync(deleteNGO));
 
 export default router;
