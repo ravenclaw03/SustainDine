@@ -7,7 +7,8 @@ const NgoSchema = new Schema({
   address: String,
   contact: String,
   pincode: String,
-  location: [Number],
+  latitude:Number,
+  longitude:Number
 });
 
 export default mongoose.model("Ngo", NgoSchema);

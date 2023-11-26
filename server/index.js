@@ -7,7 +7,6 @@ import mongoAuthRoutes from "./routes/mongoAuthRoutes.js"
 import googleAuthRoutes from "./routes/googleAuthRoutes.js"
 import foodReqRoutes from "./routes/foodReqRoutes.js"
 import cors from "cors";
-import { PORT } from "./config.js";
 import ExpressError from "./utils/ExpressError.js";
 import "dotenv/config";
 import session from "express-session";
@@ -62,6 +61,7 @@ app.use((req,res,next)=>{
 app.get("/home", (req, res) => {
   res.send("Hello Bhai, welcome to the home page");
 });
+
 //middlewares for routes
 app.use("/",mongoAuthRoutes);
 app.use("/auth",googleAuthRoutes);
@@ -83,11 +83,12 @@ app.use((err, req, res, next) => {
 const optionsdb={
   dbName:'foodApp'
 }
+const port=process.env.PORT;
 mongoose.connect(mongoDBURL,optionsdb)
   .then(() => {
     console.log("App connected to database");
-    app.listen(PORT, () => {
-      console.log(`App is listening at port ${PORT}`);
+    app.listen(port, () => {
+      console.log(`App is listening at port ${port}`);
     });
   })
   .catch((error) => {

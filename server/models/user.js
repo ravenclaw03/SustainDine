@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 import passportLocalMongoose from "passport-local-mongoose";
 
-
 const UserSchema = new mongoose.Schema({
   fullName: String,
   contact: String,
   email: String,
   type: Number,
-  latitude:Number,
-  longitude:Number
+  latitude: Number,
+  longitude: Number,
+  address: String,
 });
 
 UserSchema.plugin(passportLocalMongoose, {
