@@ -1,18 +1,14 @@
-import Ngo from "../models/ngo.js";
+import User from "../models/user.js";
 const listNGOs = async (req, res) => {
-  const ngos = await Ngo.find({});
+  const ngos = await User.find({type:2});
   return res.json({
     count: ngos.length,
     data: ngos,
   });
 };
-const newNGO = async (req, res) => {
-  const newNgo = new Ngo(req.body);
-  await newNgo.save();
-  await res.send("NGO created successfully");
-};
+
 const detailsNGO = async (req, res) => {
-  const ngo = await Ngo.findById(req.params.id);
+  const ngo = await User.findById(req.params.id);
   return res.json(ngo);
 };
 const updateNGO = async (req, res) => {
@@ -24,7 +20,7 @@ const updateNGO = async (req, res) => {
   }
 };
 const deleteNGO = async (req, res) => {
-  const result = await Ngo.findByIdAndDelete(req.params.id);
+  const result = await User.findByIdAndDelete(req.params.id);
   if (result) {
     res.send("Deleted successfully");
   } else {
@@ -32,4 +28,4 @@ const deleteNGO = async (req, res) => {
   }
 };
 
-export { listNGOs, newNGO, detailsNGO, updateNGO, deleteNGO };
+export { listNGOs, detailsNGO, updateNGO, deleteNGO };

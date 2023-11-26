@@ -1,18 +1,14 @@
-import DeliveryPerson from "../models/deliveryperson.js";
+import User from "../models/user.js";
 const allDPs = async (req, res) => {
-  const DeliveryPersons = await DeliveryPerson.find({});
+  const DeliveryPersons = await User.find({type:3});
   return res.json({
     count: DeliveryPersons.length,
     data: DeliveryPersons,
   });
 };
-const newDP = async (req, res) => {
-  const newDeliveryPerson = new DeliveryPerson(req.body);
-  await newDeliveryPerson.save();
-  await res.send("User Created Successfully");
-};
+
 const detailsOfDP = async (req, res) => {
-  const DeliveryPerson = await DeliveryPerson.findById(req.params.id);
+  const DeliveryPerson = await User.findById(req.params.id);
   return res.json(DeliveryPerson);
 };
 const updateDP = async (req, res) => {
@@ -24,11 +20,11 @@ const updateDP = async (req, res) => {
   }
 };
 const deleteDP = async (req, res) => {
-  const result = await DeliveryPerson.findByIdAndDelete(req.params.id);
+  const result = await User.findByIdAndDelete(req.params.id);
   if (result) {
     res.send("Deleted successfully");
   } else {
     res.send("User not found");
   }
 };
-export { allDPs, newDP, detailsOfDP, updateDP, deleteDP };
+export { allDPs, detailsOfDP, updateDP, deleteDP };

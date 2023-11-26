@@ -21,8 +21,7 @@ const registerUser = async (req, res) => {
       address,
     });
     const newUser = await User.register(user, password);
-    req.login(newUser, (err) => {
-      if (err) return next(err);
+    req.login(newUser, () => {
       return res.json(newUser);
     });
   } catch (err) {
@@ -37,16 +36,13 @@ const loginUser = async (req, res) => {
   return res.json(user);
 };
 const logoutUser = async (req, res, next) => {
-  console.log(req.user)
-  if(req.user){
-    req.logout(function() {
+  if (req.user) {
+    req.logout(function () {
       return res.json("Logged Out");
     });
+  } else {
+    return res.status(500).json("User not logged in");
   }
-  else{
-    return res.status(500).json("User not logged in")
-  }
-  
 };
 const currentUserDetails = async (req, res) => {
   return res.status(200).json(req.user);

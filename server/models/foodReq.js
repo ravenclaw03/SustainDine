@@ -20,6 +20,14 @@ const FoodRequestSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  ngo: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+  deliveryPerson: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 export default mongoose.model("FoodReq", FoodRequestSchema);
