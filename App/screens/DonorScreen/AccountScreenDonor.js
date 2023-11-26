@@ -1,13 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
+import { Alert } from "react-native";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons"; 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { useRoute } from "@react-navigation/native";
-import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-export default function AccountScreenDonor({ data}) {
+export default function AccountScreenDonor() {
   const navigation = useNavigation();
+  const [userData, setUserData] = useState({
+    name: 'Default Name',
+    email: 'xyz@mail.com',
+    contactNumber: '123-456-7890'
+  });
+
+  const fetchUserDataFromBackend = async () => {
+    try {
+      // Make a request to your backend endpoint to fetch user data
+      const response = await fetch("YOUR_BACKEND_ENDPOINT");
+      const data = await response.json();
+      setUserData(data);
+    } catch (error) {
+      console.log("Error fetching user data");
+    }
+  };
 
   const handleLogout = () => {
     Alert.alert(
@@ -29,26 +44,29 @@ export default function AccountScreenDonor({ data}) {
     );
   };
 
-  const route = useRoute();
-  const name = route.params?.passedData || 'Default Value';
+  // Fetch user data when the component is rendered
+  fetchUserDataFromBackend();
+
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.greeting}>Hello,</Text>
-      </View>
-      <View style={styles.profileContainer}>
-        <View style={styles.profileInfo}>
-          <Text style={styles.label}>Name:</Text>
-          
-          <Text style={styles.value}>{data|| 'Default Name'} </Text>
-        </View>
-        <View style={styles.profileInfo}>
-          <Text style={styles.label}>Email:</Text>
-          <Text style={styles.value}>xyz@mail.com</Text>
+      <View style={styles.cardContainer}>
+        <View style={styles.cardContent}>
+          <View style={styles.profileInfo}>
+            <Text style={styles.label}>Name:</Text>
+            <Text style={styles.value}>{userData.name}</Text>
+          </View>
+          <View style={styles.profileInfo}>
+            <Text style={styles.label}>Email:</Text>
+            <Text style={styles.value}>{userData.email}</Text>
+          </View>
+          <View style={styles.profileInfo}>
+            <Text style={styles.label}>Contact Number:</Text>
+            <Text style={styles.value}>{userData.contactNumber}</Text>
+          </View>
         </View>
       </View>
       <View style={styles.iconContainer}>
-        <TouchableOpacity style={styles.iconButton}>
+        <TouchableOpacity style={styles.iconButton} >
           <AntDesign name="edit" size={24} color="#333" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.iconButton} onPress={handleLogout}>
@@ -61,49 +79,50 @@ export default function AccountScreenDonor({ data}) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#F5F5F5',
+    marginTop: hp("8%"),
+    alignItems: "center", 
+    justifyContent: "center",
+    backgroundColor: "#F5F5F5", 
   },
-  header: {
-    position: 'absolute',
-    top: hp('2%'),
-    left: wp('2%'),
+  cardContainer: {
+    width: wp('90%'),
+    height: hp("32%"),
+    backgroundColor: "#fff",
+    borderRadius: wp('5%'),
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    marginBottom: hp('6%'),
+    padding: wp('5%'),
   },
-  greeting: {
-    fontSize: hp('3%'),
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  profileContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginBottom: hp('10%'),
+  cardContent: {
+    flexDirection: "column",
+    alignItems: "flex-start",
   },
   profileInfo: {
-    marginLeft: wp('2%'),
-    flexDirection: 'row',
+    flexDirection: "row",
+    marginTop: hp("3%"),
+    marginBottom: hp('2%'),
   },
   label: {
-    fontSize: hp('3%'),
-    color: '#666',
-    marginBottom: hp('1%'),
+    fontSize: wp('5%'),
+    color: "#666",
+    marginRight: wp('2%'),
   },
   value: {
-    fontSize: hp('3%'),
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: hp('2%'),
-    marginLeft: wp('4%'),
+    fontSize: wp('5%'), 
+    fontWeight: "bold",
+    color: "#333",
   },
   iconContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   iconButton: {
-    backgroundColor: '#FFA500',
-    padding: hp('1.5%'),
-    borderRadius: wp('10%'),
-    marginHorizontal: wp('2%'),
+    backgroundColor: "orange",
+    padding: wp('2.25%'), 
+    borderRadius: wp('5%'), 
+    marginHorizontal: wp('2.5%'),
   },
 });
