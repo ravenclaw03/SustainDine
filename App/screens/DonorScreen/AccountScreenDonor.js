@@ -4,6 +4,7 @@ import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons"; 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 
 export default function AccountScreenDonor() {
   const navigation = useNavigation();
@@ -24,6 +25,18 @@ export default function AccountScreenDonor() {
     }
   };
 
+  const logoutHandler = async () => {
+    try{
+      const response = await axios.get("https://minor-project-wss9.vercel.app/logout");
+      console.log(response.data)
+      navigation.navigate("Welcome");
+    } catch(error)
+    {
+      Alert.alert("Error","Couldn't log you out!")
+      console.log("Error in logout")
+    }
+  }
+
   const handleLogout = () => {
     Alert.alert(
       "Logout",
@@ -35,9 +48,7 @@ export default function AccountScreenDonor() {
         },
         {
           text: "Logout",
-          onPress: () => {
-            navigation.navigate("Welcome");
-          },
+          onPress: () => {logoutHandler},
         },
       ],
       { cancelable: false }
