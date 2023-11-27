@@ -85,9 +85,36 @@ const userInProgress = async (req, res) => {
   const FoodReqs = await FoodReq.find({
     isDPAccepted: true,
     author: req.user._id,
-  }).populate("author")
-  .populate("ngo")
-  .populate("deliveryPerson");;
+  })
+    .populate("author")
+    .populate("ngo")
+    .populate("deliveryPerson");
+  return res.status(200).json({
+    count: FoodReqs.length,
+    data: FoodReqs,
+  });
+};
+const ngoInProgress = async (req, res) => {
+  const FoodReqs = await FoodReq.find({
+    isDPAccepted: true,
+    ngo: req.user._id,
+  })
+    .populate("author")
+    .populate("ngo")
+    .populate("deliveryPerson");
+  return res.status(200).json({
+    count: FoodReqs.length,
+    data: FoodReqs,
+  });
+};
+const dpInProgress = async (req, res) => {
+  const FoodReqs = await FoodReq.find({
+    isDPAccepted: true,
+    deliveryPerson: req.user._id,
+  })
+    .populate("author")
+    .populate("ngo")
+    .populate("deliveryPerson");
   return res.status(200).json({
     count: FoodReqs.length,
     data: FoodReqs,
@@ -105,4 +132,6 @@ export {
   deleteReq,
   userActive,
   userInProgress,
+  ngoInProgress,
+  dpInProgress,
 };

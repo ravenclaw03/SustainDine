@@ -14,6 +14,8 @@ import {
   deleteReq,
   userActive,
   userInProgress,
+  dpInProgress,
+  ngoInProgress,
 } from "../controllers/foodReqCont.js";
 
 //foodReq routes
@@ -21,6 +23,8 @@ router.get("/showactv", catchAsync(activeReqs));
 router.get("/showactvDP", catchAsync(activeDpReqs));
 router.get("/useractv", catchAsync(userActive));
 router.get("/userProgress", catchAsync(userInProgress));
+router.get("/ngoProgress", catchAsync(ngoInProgress));
+router.get("/dpProgress", catchAsync(dpInProgress));
 router.get("/showall", catchAsync(allReqs));
 router.post("/new", catchAsync(newReq));
 router.put("/closeDP/:id", catchAsync(closedByDP));
