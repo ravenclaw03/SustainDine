@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Alert } from "react-native";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons"; 
@@ -35,9 +35,11 @@ export default function AccountScreenNGO() {
       console.log("Error in logout")
     }
   }
+  useEffect(() => {
+    fetchUserDataFromBackend();
+  });
 
-
-  fetchUserDataFromBackend();
+  
 
   return (
     <View style={styles.container}>
