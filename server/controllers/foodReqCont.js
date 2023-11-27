@@ -85,7 +85,9 @@ const userInProgress = async (req, res) => {
   const FoodReqs = await FoodReq.find({
     isDPAccepted: true,
     author: req.user._id,
-  });
+  }).populate("author")
+  .populate("ngo")
+  .populate("deliveryPerson");;
   return res.status(200).json({
     count: FoodReqs.length,
     data: FoodReqs,
