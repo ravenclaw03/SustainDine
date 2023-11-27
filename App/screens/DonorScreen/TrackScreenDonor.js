@@ -4,12 +4,28 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import axios from 'axios';
 
 export default function TrackScreenDonor() {
-  const [acceptedRequest, setAcceptedRequest] = useState(null);
+  const [dpDetails, setDpDetails] = useState(null);
+  const [ngoDetails, setNgoDetails] = useState(null);
 
-  const fetchAcceptedRequest = async () => {
+  const fetchNgoDetails = async () => {
     try {
-      const response = await axios.get("https://minor-project-wss9.vercel.app/showactv");
-      setAcceptedRequest(response.data);
+      const response = await fetch("https://minor-project-wss9.vercel.app/foodReq/userProgress");
+      const data = await response.json();
+      setNgoDetails(data.data);
+      console.log(data.data);
+    } catch (error) {
+      console.log("Error fetching NGO details:");
+      console.log(error);
+      Alert.alert("Error!", "Failed to fetch NGO details");
+    }
+  };
+
+  const fetchDpDetails = async () => {
+    try {
+      const response = await fetch("https://minor-project-wss9.vercel.app/foodReq/userProgress");
+      const data = await response.json();
+      setDpDetails(data.data)
+      //console.log(data.data);
     } catch (error) {
       console.log("Error fetching accepted request:");
       console.log(error);
@@ -17,20 +33,41 @@ export default function TrackScreenDonor() {
     }
   };
 
-  const handleRefresh = () => {
-    fetchAcceptedRequest();
-  };
+  fetchNgoDetails();
+  fetchDpDetails();
+
+  // const handleRefresh = () => {
+  //   fetchAcceptedRequest();
+  //   fetchNgoDetails();
+  // };
 
   return (
     <View style={styles.outerCont}>
+    {/* Card for NGO Details */}
       <TouchableOpacity style={styles.cardContainer}>
-        <Text style={styles.heading}>Accepted Request</Text>
-        {acceptedRequest ? (
+        <Text style={styles.heading}>NGO Details</Text>
+        {ngoDetails ? (
           <View style={styles.requestCard}>
             <View>
-              <Text style={styles.textcont}>Food Type: {acceptedRequest.foodType}</Text>
-              <Text style={styles.textcont}>Total no. of Plates: {acceptedRequest.noOfPlates}</Text>
-              <Text style={styles.textcont}>Is Veg?: {acceptedRequest.isVeg ? "Yes" : "No"}</Text>
+              <Text style={styles.textcont}>NGO Name: {ngoDetails._id}</Text>
+              <Text style={styles.textcont}>Location: {ngoDetails.location}</Text>
+              {/* Add more NGO details as needed */}
+            </View>
+          </View>
+        ) : (
+          <Text>No NGO details found</Text>
+        )}
+      </TouchableOpacity>
+
+      {/* Card for Accepted Request */}
+      <TouchableOpacity style={styles.cardContainer}>
+        <Text style={styles.heading}>Delivery Person Details</Text>
+        {dpDetails ? (
+          <View style={styles.requestCard}>
+            <View>
+              <Text style={styles.textcont}>Food Type: {dpDetails.foodType}</Text>
+              <Text style={styles.textcont}>Total no. of Plates: {dpDetails.noOfPlates}</Text>
+              <Text style={styles.textcont}>Is Veg?: {dpDetails.isVeg ? "Yes" : "No"}</Text>
             </View>
           </View>
         ) : (
@@ -38,9 +75,12 @@ export default function TrackScreenDonor() {
         )}
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.refreshButton} onPress={handleRefresh}>
+
+
+
+      {/* <TouchableOpacity style={styles.refreshButton} onPress={handleRefresh}>
         <Text style={styles.refreshButtonText}>Refresh</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 }
@@ -82,5 +122,12 @@ const styles = StyleSheet.create({
   refreshButtonText: {
     fontSize: hp('1.8%'),
     color: 'white',
+  },
+  ngoCardContainer: {
+    padding: wp('4%'),
+    width: wp('90%'),
+    borderRadius: wp('3%'),
+    backgroundColor: '#e3e3e3',
+    marginBottom: hp('2%'),
   },
 });

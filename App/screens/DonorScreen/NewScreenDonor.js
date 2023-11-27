@@ -10,6 +10,7 @@ export default function NewScreenDonor() {
   const [requestGenerated, setRequestGenerated] = useState(false);
   const [requests, setRequests] = useState([]);
   const [isVegetarian, setIsVegetarian] = useState(false);
+  const [availableOrders, setAvailableOrders] = useState([]);
 
   const handleRequestClick = () => {
     setShowInputFields((prev) => !prev);
@@ -38,7 +39,10 @@ export default function NewScreenDonor() {
           ...prevRequests,
           { type, numberOfPlates, isVegetarian }
         ]);
-        setRequestGenerated(true);
+        setRequestGenerated(true);setShowInputFields(false);
+        setType('');
+        setnumberOfPlates('');
+        setIsVegetarian(false); 
         setTimeout(() => {
         setRequestGenerated(false);
       }, 4000);
@@ -55,17 +59,29 @@ export default function NewScreenDonor() {
     }
   };
 
-  const deleteRequest = async (index) => {
+  const fetchReq = async () => {
     try{
-      const response = await axios.post("https://minor-project-wss9.vercel.app/new",{});
-      console.log(response.data);
-      const updatedRequests = requests.filter((_, i) => i !== index);
-      setRequests(updatedRequests);
+      const response = await fetch("https://minor-project-wss9.vercel.app/foodReq/useractv");
+      const data = await response.json();
+      setAvailableOrders(data.data);
     }catch(error){
-      console.log("error in deleteRequest");
-      console.log(error);
-      Alert.alert("Error!", "Request cannot be initiated");
+      //console.log("error in fetching req");
+      //console.log(error.message);
     }
+  };
+
+  fetchReq();
+
+  const deleteRequest = async (id) => {
+    console.log(id);
+    try{
+      const response = await axios.delete(`https://minor-project-wss9.vercel.app/foodReq/${id}`);
+      console.log(response.data);
+    }catch(error){
+      console.log(error.message);
+    }
+    const updatedRequests = requests.filter((_, i) => i !== id);
+    setAvailableOrders(updatedRequests);
   };
 
   return (
@@ -118,24 +134,27 @@ export default function NewScreenDonor() {
         </View>
       )}
 
-      {requests.length === 0 && (
+      {/* {requests.length === 0 && (
         <View>
           <Text style={styles.noRequestText}>
             Sharing is caring!  {"\n"} Share now someone is waiting eagerly 👀
           </Text>
         </View>
         
-      )}
+      )} */}
 
       <ScrollView style={styles.requestContainer}>
-        {requests.map((request, index) => (
+        {availableOrders.map((item, index) => (
           <View style={styles.requestCard} key={index}>
             <View>
-              <Text style={styles.textcont}>Food Type: {request.type}</Text>
-              <Text style={styles.textcont}>Total no. of Plates: {request.numberOfPlates}</Text>
+              <Text style={styles.textcont}>Food Type: {item.type}</Text>
+              <Text style={styles.textcont}>Total no. of Plates: {item.numberOfPlates}</Text>
+              <Text style={styles.textcont}>Is Veg: {item.isVegetarian ? 'Yes' : 'No'}</Text>
+              <Text></Text>
+              <Text style={styles.textcont}>{item.isNGOaccepted ? 'Request In Progress' : '\t\t\t\t\t\t\tActive Request'}</Text>
             </View>
             <View>
-              <TouchableOpacity onPress={() => deleteRequest(index)} style={styles.deleteButton}>
+              <TouchableOpacity onPress={() => deleteRequest(item._id)} style={styles.deleteButton}>
                 <Text style={styles.buttonText}>Delete</Text>
               </TouchableOpacity>
             </View>
@@ -224,7 +243,7 @@ const styles = StyleSheet.create({
     padding: wp('2.5%'),
     marginVertical: hp('1%'),
     width: wp('85%'),
-    height: hp('10%'),
+    height: hp('12%'),
     borderRadius: wp('2%'),
     flexDirection: 'row',
     justifyContent: 'center',
