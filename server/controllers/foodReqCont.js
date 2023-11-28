@@ -4,6 +4,7 @@ const activeReqs = async (req, res) => {
   const FoodReqs = await FoodReq.find({
     isDPAccepted: false,
     isNGOAccepted: false,
+    isCompleted: false,
   });
   return res.status(200).json({
     count: FoodReqs.length,
@@ -14,6 +15,7 @@ const activeDpReqs = async (req, res) => {
   const FoodReqs = await FoodReq.find({
     isDPAccepted: false,
     isNGOAccepted: true,
+    isCompleted: false,
   });
   return res.status(200).json({
     count: FoodReqs.length,
@@ -84,6 +86,7 @@ const userActive = async (req, res) => {
 const userInProgress = async (req, res) => {
   const FoodReqs = await FoodReq.find({
     isDPAccepted: true,
+    isCompleted: false,
     author: req.user._id,
   })
     .populate("author")
@@ -97,6 +100,7 @@ const userInProgress = async (req, res) => {
 const ngoInProgress = async (req, res) => {
   const FoodReqs = await FoodReq.find({
     isDPAccepted: true,
+    isCompleted: false,
     ngo: req.user._id,
   })
     .populate("author")
@@ -110,6 +114,7 @@ const ngoInProgress = async (req, res) => {
 const dpInProgress = async (req, res) => {
   const FoodReqs = await FoodReq.find({
     isDPAccepted: true,
+    isCompleted: false,
     deliveryPerson: req.user._id,
   })
     .populate("author")
@@ -119,6 +124,12 @@ const dpInProgress = async (req, res) => {
     count: FoodReqs.length,
     data: FoodReqs,
   });
+};
+const endReq = async (req, res) => {
+  const foodreq = await FoodReq.findById(req.params.id);
+  foodreq.isCompleted = true;
+  await foodreq.save();
+  return res.status(200).json(foodreq);
 };
 export {
   activeReqs,
@@ -134,4 +145,5 @@ export {
   userInProgress,
   ngoInProgress,
   dpInProgress,
+  endReq,
 };

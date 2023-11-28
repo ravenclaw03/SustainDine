@@ -16,12 +16,14 @@ import {
   userInProgress,
   dpInProgress,
   ngoInProgress,
+  endReq,
 } from "../controllers/foodReqCont.js";
 
 //foodReq routes
 router.get("/showactv", catchAsync(activeReqs));
 router.get("/showactvDP", catchAsync(activeDpReqs));
 router.get("/useractv", catchAsync(userActive));
+router.put("/endReq/:id",catchAsync(endReq))
 router.get("/userProgress", catchAsync(userInProgress));
 router.get("/ngoProgress", catchAsync(ngoInProgress));
 router.get("/dpProgress", catchAsync(dpInProgress));

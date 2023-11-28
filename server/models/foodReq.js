@@ -14,6 +14,10 @@ const FoodRequestSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  isCompleted: {
+    type: Boolean,
+    default: false,
+  },
   latitude:Number,
   longitude:Number,
   author: {
