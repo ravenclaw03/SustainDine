@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, StyleSheet, View, TouchableOpacity, Alert } from "react-native";
+import { Text, StyleSheet, View, TouchableOpacity, Alert, RefreshControl } from "react-native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -11,19 +11,16 @@ import MapView, { Marker, Polyline } from 'react-native-maps';
 export default function TrackScreenDonor() {
   const [dpDetails, setDpDetails] = useState(null);
   const [ngoDetails, setNgoDetails] = useState(null);
-  const [latitude1, setlatitude1] = useState({
-    latitude: 28.6026,
+  const [refreshing, setRefreshing] = useState(false);
+  const [orderDetails, setOrderDetails] = useState(null);
+  const [loc1, setLoc1 ] = useState({
+    latitude: 0,
+    longitude: 0,
   });
-  const [latitude2, setlatitude2] = useState({
-    latitude: 28.6026,
+  const [loc2, setLoc2 ] = useState({
+    latitude: 0,
+    longitude: 0,
   });
-  const [longitude1, setlongitude1] = useState({
-    longitude: 77.409,
-  });
-  const [longitude2, setlongitude2] = useState({
-    longitude: 77.409,
-  });
-  //const [orderDetails, setOrderDetails] = useState(null);
 
   const initialRegion = {
     latitude: 28.6026,
@@ -33,10 +30,10 @@ export default function TrackScreenDonor() {
   };
 
   const marker1 = {
-    latitude: latitude1.latitude,
-    longitude: longitude1.longitude,
+    latitude: loc1.latitude,
+    longitude: loc1.longitude,
   };
-  const marker2 = { latitude: latitude2.latitude, longitude: longitude2.longitude};
+  const marker2 = { latitude: loc2.latitude, longitude: loc2.longitude};
 
   const fetchDetails = async () => {
     try {
@@ -45,26 +42,33 @@ export default function TrackScreenDonor() {
       );
       setNgoDetails(response.data.data[0].ngo);
       setDpDetails(response.data.data[0].deliveryPerson);
-      setlatitude1(response.data.data[0].ngo.latitude)
-      setlatitude2(response.data.data[0].author.latitude)
-      setlongitude1(response.data.data[0].ngo.longitude)
-      setlongitude2(response.data.data[0].author.longitude)
-      //setOrderDetails(response.data);
-      //console.log(response.data.data.numberOfPlates);
+      setOrderDetails(response.data.data[0]);
+      setLoc1(response.data.data[0].ngo)
+      setLoc2(response.data.data[0].author)
     } catch (error) {
-      console.log("Error fetching NGO details:");
-      console.log(error);
-      Alert.alert("Error!", "Failed to fetch NGO details");
+      //console.log("Error fetching details:");
+      //console.log(error);
+      //Alert.alert("Error!", "Failed to fetch details");
     }
   };
 
   useEffect(() => {
     fetchDetails();
-  });
+  }, [refreshing]);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchDetails();
+    setRefreshing(false);
+  };
+
 
   return (
     <View style={styles.outerCont}>
-      {/* <TouchableOpacity style={styles.cardContainer}>
+      <ScrollView style={styles.sv} refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+      <TouchableOpacity style={styles.cardContainer}>
         <Text style={styles.heading}>Request Details</Text>
         {orderDetails ? (
           <View style={styles.requestCard}>
@@ -79,8 +83,7 @@ export default function TrackScreenDonor() {
         ) : (
           <Text>No order details found</Text>
         )}
-      </TouchableOpacity> */}
-      <ScrollView style={styles.sv}>
+      </TouchableOpacity>
         <TouchableOpacity style={styles.cardContainer}>
           <Text style={styles.heading}>NGO Details</Text>
           {ngoDetails ? (
@@ -147,7 +150,7 @@ export default function TrackScreenDonor() {
             <Text style={styles.overlayText}>Accept an order to track details</Text>
           </View>
         )}
-      </View>
+        </View>
       </ScrollView>
     </View>
   );

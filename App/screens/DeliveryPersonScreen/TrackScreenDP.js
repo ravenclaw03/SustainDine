@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, StyleSheet, View, TouchableOpacity, Alert } from "react-native";
+import { Text, StyleSheet, View, Image, TouchableOpacity, Alert, RefreshControl } from "react-native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -11,19 +11,20 @@ import MapView, { Marker, Polyline } from 'react-native-maps';
 export default function TrackScreenDP() {
   const [donorDetails, setDonorDetails] = useState(null);
   const [ngoDetails, setNgoDetails] = useState(null);
-  const [latitude1, setlatitude1] = useState({
-    latitude: 28.6026,
+  const [refreshing, setRefreshing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [orderDetails, setOrderDetails] = useState(null);
+  const [idDetails, setIdDetails ] = useState({
+    _id : "",
   });
-  const [latitude2, setlatitude2] = useState({
-    latitude: 28.6026,
+  const [loc1, setLoc1 ] = useState({
+    latitude: 0,
+    longitude: 0,
   });
-  const [longitude1, setlongitude1] = useState({
-    longitude: 77.409,
+  const [loc2, setLoc2 ] = useState({
+    latitude: 0,
+    longitude: 0,
   });
-  const [longitude2, setlongitude2] = useState({
-    longitude: 77.409,
-  });
-  //const [orderDetails, setOrderDetails] = useState(null);
 
   const initialRegion = {
     latitude: 28.6026,
@@ -33,10 +34,28 @@ export default function TrackScreenDP() {
   };
 
   const marker1 = {
-    latitude: latitude1.latitude,
-    longitude: longitude1.longitude,
+    latitude: loc1.latitude,
+    longitude: loc1.longitude,
   };
-  const marker2 = { latitude: latitude2.latitude, longitude: longitude2.longitude};
+  const marker2 = { latitude: loc2.latitude, longitude: loc2.longitude};
+
+  const endActiveOrder = async(id) => {
+    try{
+      setIsLoading(true);
+      const response = await axios.put(`https://minor-project-wss9.vercel.app/foodReq/endReq/${id}`);
+      console.log(response.data);
+      setTimeout(() => {
+        setIsLoading(false);
+        setTimeout(() => {
+          setNgoDetails(null);
+          setDonorDetails(null);
+          setOrderDetails(null);
+        }, 100);
+      }, 6000);
+    }catch(error){
+
+    }
+  };
 
   const fetchDetails = async () => {
     try {
@@ -45,26 +64,40 @@ export default function TrackScreenDP() {
       );
       setNgoDetails(response.data.data[0].ngo);
       setDonorDetails(response.data.data[0].author);
-      setlatitude1(response.data.data[0].ngo.latitude)
-      setlatitude2(response.data.data[0].author.latitude)
-      setlongitude1(response.data.data[0].ngo.longitude)
-      setlongitude2(response.data.data[0].author.longitude)
+      setOrderDetails(response.data.data[0]);
+      setLoc1(response.data.data[0].ngo);
+      setLoc2(response.data.data[0].author);
+      setIdDetails(response.data.data[0]);
       //setOrderDetails(response.data);
-      //console.log(response.data.data.numberOfPlates);
+      //console.log(response.data.data[0]._id);
     } catch (error) {
-      console.log("Error fetching NGO details:");
-      console.log(error);
-      Alert.alert("Error!", "Failed to fetch NGO details");
+      console.log("Error fetching details:");
+      //console.log(error);
+      //Alert.alert("Error!", "Failed to fetch NGO details");
     }
   };
 
   useEffect(() => {
     fetchDetails();
-  });
+  }, [refreshing]);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchDetails();
+    setRefreshing(false);
+  };
 
   return (
     <View style={styles.outerCont}>
-      {/* <TouchableOpacity style={styles.cardContainer}>
+      <ScrollView style={styles.sv} refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>   
+        {orderDetails && (
+          <TouchableOpacity style={styles.topButton} onPress={() => endActiveOrder(idDetails._id)}>
+            <Text style={styles.topText}>End the active order</Text>
+          </TouchableOpacity>
+        )}
+      <TouchableOpacity style={styles.cardContainer}>
         <Text style={styles.heading}>Request Details</Text>
         {orderDetails ? (
           <View style={styles.requestCard}>
@@ -79,8 +112,7 @@ export default function TrackScreenDP() {
         ) : (
           <Text>No order details found</Text>
         )}
-      </TouchableOpacity> */}
-      <ScrollView style={styles.sv}>
+      </TouchableOpacity>
         <TouchableOpacity style={styles.cardContainer}>
           <Text style={styles.heading}>NGO Details</Text>
           {ngoDetails ? (
@@ -124,7 +156,14 @@ export default function TrackScreenDP() {
             <Text>No Donor found</Text>
           )}
         </TouchableOpacity>
-
+        {isLoading && (
+        <View style={styles.overlay}>
+          <Image
+            source={require("../../assets/images/login.gif")}
+            style={styles.loginIMG}
+          />
+        </View>
+      )}
         <View style={styles.mapContainer}>
         <MapView
           style={styles.map}
@@ -172,6 +211,21 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: hp("2%"),
     marginBottom: hp("2%"),
+  },
+  topText: {
+    color: "white",
+    fontSize: 16,
+    marginLeft: wp('3%'),
+    marginTop: wp('2%'),
+  },
+  topButton: {
+    backgroundColor: '#0096FF', 
+    width: wp('35%'),
+    padding: 4,
+    height: hp('5%'),
+    marginLeft: wp('28%'),
+    marginBottom: wp('2.5%'),
+    borderRadius: wp('2%')
   },
   requestCard: {
     backgroundColor: "#fff",
@@ -224,5 +278,18 @@ const styles = StyleSheet.create({
     fontSize: wp('4%'),
     fontWeight: 'bold',
     color: '#333',
+  },
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loginIMG: {
+    width: wp("65%"),
+    height: wp("65%"),
   },
 });

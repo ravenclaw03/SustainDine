@@ -130,10 +130,6 @@ export default function SignUpScreen() {
     return null;
   };
 
-  const googleLogin = async () => {
-    console.log("Hello google")
-  }
-
   const handleSignup = async () => {
     let isValid = true;
     if (
@@ -338,15 +334,6 @@ export default function SignUpScreen() {
 
             </View>
           )}
-        </View>
-        <Text style={styles.or}>Or</Text>
-        <View style={styles.bottomCont}>
-          <TouchableOpacity style={styles.bottomInnerCont} onPress={googleLogin}>
-            <Image
-              source={require("../assets/icons/google.png")}
-              style={styles.img}
-            />
-          </TouchableOpacity>
         </View>
         <View style={styles.lastCont}>
           <Text style={styles.textBlock}>Already have an account?</Text>

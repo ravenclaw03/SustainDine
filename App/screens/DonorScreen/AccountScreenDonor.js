@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Alert } from "react-native";
-import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Alert, Image } from "react-native";
+import { Text, StyleSheet, View, TouchableOpacity, RefreshControl, ScrollView } from "react-native";
 import { AntDesign } from "@expo/vector-icons"; 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation } from "@react-navigation/native";
@@ -8,12 +8,14 @@ import axios from "axios";
 
 export default function AccountScreenDonor() {
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
   const [userData, setUserData] = useState({
-    fullName: 'Default Name',
-    email: 'xyz@mail.com',
-    contact: '123-456-7890',
-    address: 'unknown'
+    fullName: 'fetching details...',
+    email: 'fetching details...',
+    contact: 'fetching details...',
+    address: 'fetching details...',
   });
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchUserDataFromBackend = async () => {
     try {
@@ -27,8 +29,14 @@ export default function AccountScreenDonor() {
 
   const logoutHandler = async () => {
     try{
+      setIsLoading(true);
       const response = await axios.get("https://minor-project-wss9.vercel.app/logout");
-      navigation.navigate("Welcome");
+      setTimeout(() => {
+        setIsLoading(false);
+        setTimeout(() => {
+          navigation.navigate("Welcome");
+        }, 100);
+      }, 6000);
     } catch(error)
     {
       Alert.alert("Error","Couldn't log you out!")
@@ -37,9 +45,23 @@ export default function AccountScreenDonor() {
   }
 
 
-  fetchUserDataFromBackend();
+  useEffect(() => {
+    fetchUserDataFromBackend();
+  }, [refreshing]);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchUserDataFromBackend();
+    setRefreshing(false);
+  };
+
+
+  
 
   return (
+    <ScrollView style={styles.c} refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    }>
     <View style={styles.container}>
       <View style={styles.cardContainer}>
         <View style={styles.cardContent}>
@@ -66,17 +88,30 @@ export default function AccountScreenDonor() {
           <Text style={styles.logoutText}>Logout</Text>
           <AntDesign name="logout" size={24} color="#333" />
         </TouchableOpacity>
+        {isLoading && (
+          <View style={styles.overlay}>
+            <Image
+              source={require("../../assets/images/login.gif")}
+              style={styles.loginIMG}
+            />
+          </View>
+        )}
       </View>
     </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  c:{
+    flex: 1,
+  },
   container: {
     marginTop: hp("8%"),
     alignItems: "center", 
     justifyContent: "center",
     backgroundColor: "#F5F5F5", 
+    height: hp('70%'),
   },
   cardContainer: {
     width: wp('90%'),
@@ -123,5 +158,18 @@ const styles = StyleSheet.create({
   logoutText: {
     fontSize: hp('2%'),
     marginRight: wp('2%'),
+  },
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loginIMG: {
+    width: wp("65%"),
+    height: wp("65%"),
   },
 });

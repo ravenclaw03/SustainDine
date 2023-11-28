@@ -21,16 +21,13 @@ import {
 } from "react-native-responsive-screen";
 import axios from "axios";
 
-
 export default function LoginScreen() {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
 
   const validateEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -47,10 +44,6 @@ export default function LoginScreen() {
       return false;
     }
     return true;
-  };
-
-  const googleLogin = async () => {
-    console.log("Hello google");
   };
 
   const forgot = async () => {
@@ -77,7 +70,9 @@ export default function LoginScreen() {
           setIsLoading(false);
           setTimeout(() => {
             if (response.data.type === 1) {
-              navigation.navigate("Donor", { passedData: response.data.fullName });
+              navigation.navigate("Donor", {
+                passedData: response.data.fullName,
+              });
             } else if (response.data.type === 2) {
               navigation.navigate("NGO");
             } else if (response.data.type === 3) {
@@ -96,7 +91,6 @@ export default function LoginScreen() {
     } else {
       Alert.alert("Error", "Please fill in all the fields correctly.");
     }
-
   };
 
   const navigation = useNavigation();
@@ -162,27 +156,15 @@ export default function LoginScreen() {
             <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
               <Text style={styles.login}>Login</Text>
             </TouchableOpacity>
-            {isLoading && (
-              <View style={styles.overlay}>
-                <Image
-                  source={require("../assets/images/login.gif")}
-                  style={styles.loginIMG}
-                />
-              </View>
-            )}
-          </View>
-          <Text style={styles.or}>Or</Text>
-          <View style={styles.bottomCont}>
-            <TouchableOpacity
-              style={styles.bottomInnerCont}
-              onPress={googleLogin}
-            >
-              <Image
-                source={require("../assets/icons/google.png")}
-                style={styles.img}
-              />
-            </TouchableOpacity>
-          </View>
+              {isLoading && (
+                <View style={styles.overlay}>
+                  <Image
+                    source={require("../assets/images/login.gif")}
+                    style={styles.loginIMG}
+                  />
+                </View>
+              )}
+            </View>
           <View style={styles.lastCont}>
             <Text style={styles.textBlock}>Don't have an account?</Text>
             <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
@@ -212,7 +194,7 @@ const styles = StyleSheet.create({
   imgCont: {
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: wp("4%"),
+    marginTop: wp("8%"),
   },
   backbutton: {
     backgroundColor: "orange",
