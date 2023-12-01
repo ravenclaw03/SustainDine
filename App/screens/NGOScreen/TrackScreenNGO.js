@@ -36,17 +36,25 @@ export default function TrackScreenNGO() {
   const marker2 = { latitude: loc2.latitude, longitude: loc2.longitude};
 
   const fetchDetails = async () => {
+    
     try {
       const response = await axios.get(
         "https://minor-project-wss9.vercel.app/foodReq/ngoProgress"
       );
+      if(!response.data.count){
+        setDonorDetails(null);
+        setDpDetails(null);
+        setOrderDetails(null);
+      }
       setDonorDetails(response.data.data[0].author);
       setDpDetails(response.data.data[0].deliveryPerson);
       setOrderDetails(response.data.data[0]);
       setLoc1(response.data.data[0].ngo)
       setLoc2(response.data.data[0].author)
       //setOrderDetails(response.data);
+      
       //console.log(response.data);
+
     } catch (error) {
       //console.log("Error fetching details:");
       //console.log(error);
@@ -87,12 +95,12 @@ export default function TrackScreenNGO() {
         )}
       </TouchableOpacity>
         <TouchableOpacity style={styles.cardContainer}>
-          <Text style={styles.heading}>NGO Details</Text>
+          <Text style={styles.heading}>Donor Details</Text>
           {donorDetails ? (
             <View style={styles.requestCard}>
               <View>
                 <Text style={styles.textcont}>
-                  NGO Name: {donorDetails.fullName}
+                  Name: {donorDetails.fullName}
                 </Text>
                 <Text style={styles.textcont}>
                   Contact: {donorDetails.contact}

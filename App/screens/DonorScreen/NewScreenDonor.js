@@ -62,6 +62,7 @@ export default function NewScreenDonor() {
         setType("");
         setnumberOfPlates("");
         setIsVegetarian(false);
+        fetchReq();
         setTimeout(() => {
           setRequestGenerated(false);
         }, 4000);
@@ -114,6 +115,7 @@ export default function NewScreenDonor() {
         setTimeout(() => {
           const updatedRequests = requests.filter((_, i) => i !== id);
           setAvailableOrders(updatedRequests);
+          fetchReq();
         }, 100);
       }, 5000);
     } catch (error) {
@@ -177,6 +179,7 @@ export default function NewScreenDonor() {
         </View>
       )}
 
+      
       <ScrollView style={styles.requestContainer} refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
@@ -193,7 +196,7 @@ export default function NewScreenDonor() {
               <Text></Text>
               <Text style={styles.textcont}>
                 {item.isNGOaccepted
-                  ? "Request In Progress"
+                  ? "\t\t\t\t\t\t\tRequest In Progress"
                   : "\t\t\t\t\t\t\tActive Request"}
               </Text>
             </View>

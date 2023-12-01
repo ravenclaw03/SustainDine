@@ -40,6 +40,11 @@ export default function TrackScreenDonor() {
       const response = await axios.get(
         "https://minor-project-wss9.vercel.app/foodReq/userProgress"
       );
+      if(!response.data.count){
+        setNgoDetails(null);
+        setDpDetails(null);
+        setOrderDetails(null);
+      }      
       setNgoDetails(response.data.data[0].ngo);
       setDpDetails(response.data.data[0].deliveryPerson);
       setOrderDetails(response.data.data[0]);

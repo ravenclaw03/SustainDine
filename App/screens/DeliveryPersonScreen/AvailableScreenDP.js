@@ -62,6 +62,7 @@ export default function AvailableScreenDP() {
         setTimeout(() => {
           const updatedOrders = availableOrders.filter((_, i) => i !== id);
           setAvailableOrders(updatedOrders);
+          refreshOrders();
         }, 100);
       }, 6000);
     } catch (error) {

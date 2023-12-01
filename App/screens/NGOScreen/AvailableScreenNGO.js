@@ -61,6 +61,7 @@ export default function AvailableScreenNGO() {
         setTimeout(() => {
           const updatedOrders = availableOrders.filter((_, i) => i !== id);
           setAvailableOrders(updatedOrders);
+          refreshOrders();
         }, 100);
       }, 6000);
     } catch (error) {
