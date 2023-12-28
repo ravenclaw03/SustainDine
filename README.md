@@ -10,3 +10,9 @@ To run on mobile phone(android/iOS):
 2. Run npm install in terminal.
 3. Move to App directory and type "npx expo start".
 
+How it works.
+1. Donor creates a request to donate surplus food , providing certain details regarding it.
+2. NGO accepts an available request.
+3. Delivery person accepts an available request which has been accepted by a NGO and delivers the food from donor to NGO.
+4. The actors can access each others details.
+
