@@ -16,3 +16,4 @@ How it works.
 3. Delivery person accepts an available request which has been accepted by a NGO and delivers the food from donor to NGO.
 4. The actors can access each others details.
 
+For preview: [Click here](https://youtu.be/a7iRIXZpktQ?feature=shared)
