@@ -9,6 +9,7 @@ To run on mobile phone(android/iOS):
 1. Install Expo in your phone.
 2. Run npm install in terminal.
 3. Move to App directory and type "npx expo start".
+4. Scan Qr code through Expo to access the app. 
 
 How it works.
 1. Donor creates a request to donate surplus food , providing certain details regarding it.
